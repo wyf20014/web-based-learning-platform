@@ -1,0 +1,37 @@
+{{>course_nav}}
+<div class="col-sm-9">
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h2>{{name}}</h2>
+    {{#if role.student}}
+     <p class='text-right'><button type="button" class="btn btn-primary" >参加此课程</button></p>
+    {{/if}}
+  </div>
+  <div class="panel-body">
+    <h4>课程简介</h4>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;{{info}}</p>
+  </div>
+
+  <!-- List group -->
+  <div class="panel-body">
+    <div class="list-group">
+    <h4>课程章节</h4>
+    {{#each videos}}
+    <a href="{{url}}" class="list-group-item">
+      第{{index}}课: {{videoName}}
+    </a>
+    {{/each}}
+  </div>
+  </div>
+</div>
+</div>
+<input type='hidden' id='tag_id' val='{{tag}}'>
+{{#section 'jquery'}}
+  <script>
+    $('document').ready(function(){
+      $('#header_nav li').eq(1).addClass('active');
+      var tag =  '#'+$('#tag_id').val();
+      $(tag).addClass('active');
+    });
+  </script>
+{{/section}}

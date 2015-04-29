@@ -1,0 +1,31 @@
+{{>course_nav}}
+<div class="col-sm-9">
+	<div>
+		<ul class="nav nav-tabs">
+		  <li role="presentation" class="active"><a href="#">最新</a></li>
+		  <li role="presentation"><a href="#">最热</a></li>
+		</ul>
+	</div>
+	<div class="row">
+		{{#each courses}}
+			  <div class="col-xs-8 col-md-4">
+				  <p class="text-center">
+				    <a href="/course/{{name}}/preferences" class="thumbnail">
+				      <img src="{{img}}" alt="name">
+				      {{name}}
+				    </a>
+				  </p>
+			  </div>
+		  {{/each}}
+	</div>
+</div>
+<input type='hidden' id='tag_id' value='{{tag}}'>
+{{#section 'jquery'}}
+	<script>
+		$('document').ready(function(){
+			$('#header_nav li').eq(1).addClass('active');
+			var tag =  '#'+$('#tag_id').val();
+			$(tag).addClass('active');
+		});
+	</script>
+{{/section}}

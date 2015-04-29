@@ -1,0 +1,36 @@
+{{>student_nav}}
+<div class="col-sm-9">
+	<div class="row">
+		{{#if courses_list}}
+		{{#each courses_list}}
+			  <div class="col-sm-6 col-md-4">
+			    <div class="thumbnail">
+			      <img src="{{img}}" alt="{{course}}">
+			      <div class="caption">
+			       	<a href="/course/{{course}}/preferences">
+			       		<h4>{{course}}</h4>
+			        	</a>
+			        <p>已学到:&nbsp;{{video}}</p>
+			        <p><a href="/course/{{course}}/preferences" class="btn btn-primary" role="button">继续学习</a> <a href="/student/{{account.id}}/course_del" class="btn btn-danger" role="button">删除此课程</a></p>
+			      </div>
+			    </div>
+			  </div>
+		 {{/each}}
+		 {{else}}
+		 <div class="col-sm-4">
+			<h4>你还没参加课程，快去学习吧！</h4>
+		</div>
+		<div class="col-sm-1">
+			 <button class="btn btn-info" onclick="window.location='/course/list'">参加课程</button>
+		</div>
+		 {{/if}}
+	</div>
+</div>
+{{#section 'jquery'}}
+	<script>
+		$('document').ready(function(){
+			$('#header_nav li').eq(4).addClass('active');
+			$('#student_nav li').eq(1).addClass('active');
+		});
+	</script>
+{{/section}}

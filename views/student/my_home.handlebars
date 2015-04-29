@@ -1,0 +1,10 @@
+{{>student_nav}}
+<div class="col-sm-9"><h2>Welcome to Home , {{account.name}}</h2></div>
+{{#section 'jquery'}}
+	<script>
+		$('document').ready(function(){
+			$('#header_nav li').eq(4).addClass('active');
+			$('#student_nav li').eq(0).addClass('active');
+		});
+	</script>
+{{/section}}

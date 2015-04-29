@@ -1,0 +1,60 @@
+<nav class="navbar navbar-inverse navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="logo" class="navbar-brand" href="/">IT学堂</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav" id='header_nav'>
+        <li><a href="/">首页</a></li>
+        <li><a href="/course/list">课程</a></li>
+        <li><a href="/course/list">日记</a></li>
+        <li><a href="#">问答</a></li>
+        {{#if role}}
+          {{#if role.admin}}
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">管理中心<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href='/admin/{{account.id}}/home'>管理主页</a></li>
+                  <li><a href='/admin/{{account.id}}/course'>课程管理</a></li>
+                  <li><a href='/admin/{{account.id}}/student'>学生管理</a></li>
+                </ul>
+              </li>
+          {{/if}}
+          {{#if role.student}}
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">个人中心<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href='/student/{{account.id}}/my_home'>我的主页</a></li>
+                  <li><a href='/student/{{account.id}}/my_course'>我的课程</a></li>
+                  <li><a href='/student/{{account.id}}/my_note'>我的日记</a></li>
+                  <li><a href='/student/{{account.id}}/my_question'>我的问答</a></li>
+                  <li><a href='/student/{{account.id}}/my_account'>我的账户</a></li>
+                </ul>
+              </li>
+          {{/if}}
+        {{/if}}
+      </ul>
+      <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="搜索课程、问答">
+        </div>
+        <button type="submit" class="btn btn-default">搜索</button>
+      </form>
+      {{#if role}}
+      <button type="button" class="btn btn-default navbar-btn navbar-right" onclick="window.location='/quit'">退出</button>
+     {{else}}
+     <button type="button" class="btn btn-default navbar-btn navbar-right" onclick="window.location='/student/register'">注册</button>
+     <button type="button" class="btn btn-primary navbar-btn navbar-right" onclick="window.location='/student/login'">登录</button>
+     {{/if}}
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
