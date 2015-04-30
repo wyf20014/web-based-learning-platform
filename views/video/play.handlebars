@@ -1,4 +1,33 @@
-<video width="320" height="240" controls="controls">
-  <source src="{{url}}" type="video/mp4">
-	Your browser does not support the video tag.
-</video>
+{{> course_nav}}
+<div class="col-sm-9">
+
+<div class="panel panel-default">
+<input type='hidden' id='tag' value='{{tag}}'>
+  <div class="panel-heading">
+    <h2>{{video_data.course_name}}</h2>
+  </div>
+  <div class="panel-body">
+    <h4>第{{video_data.index}}课:&nbsp;&nbsp;{{video_data.name}}<h4>
+    <video autobuffer autoloop loop controls>
+	<source src="/media/video.oga">
+	<source src="{{video_data.url}}">
+	<object type="video/ogg" data="/media/video.oga" width="800" height="600">
+	<param name="src" value="/media/video.oga">
+	<param name="autoplay" value="false">
+	<param name="autoStart" value="0">
+	<p><a href="/media/video.oga">Download this video file.</a></p>
+	</object>
+  </video>
+  </div>
+  </div>
+<input id='tag' type='hidden' value='{{tag}}'>
+</div>
+{{#section 'jquery'}}
+	<script>
+		$('document').ready(function(){
+			$('#header_nav li').eq(1).addClass('active');
+			var tag = '#'+$('#tag').val();
+			$(tag).addClass('active');
+		});
+	</script>
+{{/section}}

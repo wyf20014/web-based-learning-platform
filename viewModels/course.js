@@ -18,7 +18,7 @@ module.exports = {
 				return {
 					videoName: video.name,
 					index: video.index,
-					url: '/videos/' + video._id,
+					url: video.url,
 				};
 			}),
 		});

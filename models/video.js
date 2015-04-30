@@ -1,12 +1,12 @@
 var mongoose = require('mongoose');
 
-var vedioSchema = mongoose.Schema({
+var videoSchema = mongoose.Schema({
     name: String,
     index: Number,
     url: {type: String, default:""},
     course_name: {type: String, default:""},  //course_id
 });
 
-var Vedio = mongoose.model('Vedio', vedioSchema);
+var Video = mongoose.model('Video', videoSchema);
 
-module.exports = Vedio;
+module.exports = Video;

@@ -3,16 +3,18 @@
 <div class="panel panel-default">
 <input type='hidden' id='tag' value='{{tag}}'>
   <div class="panel-heading">
-    <h3>{{name}}</h3>
+  <div class="col-sm-offset-1">
+     <h3>{{name}}</h3>
     <p><span style='color:#428bca'>提问者:</span>&nbsp;&nbsp;{{stu_account}},&nbsp;&nbsp;<span style='color:#428bca'>提问时间:</span>&nbsp;&nbsp;{{time}}</p>
   </div>
-  <div class="panel-body">
+  </div>
+  <div class="panel-body col-sm-offset-1">
     <h4 style='color:#428bca'>问题内容</h4>
     <p >&nbsp;&nbsp;&nbsp;&nbsp;{{content}}</p>
   </div>
 
   <!-- List group -->
-  <div class="panel-body">
+  <div class="panel-body col-sm-offset-1">
     <div class="list-group">
     {{#if answers}}
     <h4>所有回答</h4>
@@ -30,7 +32,7 @@
   </div>
   </div>
 </div>
-
+{{#if role}}
 <h3>&nbsp;&nbsp;我来回答</h3><br>
   <div class="formContainer">
       <form class="form-horizontal newsletterForm" role="form" action="/student/{{account.id}}/write_answer" method="POST">
@@ -48,7 +50,7 @@
           </div>
       </form>
   </div>
-
+  {{/if}}
 </div>
 
 {{#section 'jquery'}}

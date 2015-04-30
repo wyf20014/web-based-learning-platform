@@ -21,8 +21,7 @@
 		       	<div class="col-sm-2">
 		       		<br>
 				<button class="btn btn-info noteControl">展开内容</button>
-				<br>
-				<button class="btn btn-danger noteDel" onclick="checkDelNote('{{../account.id}}','{{stu_account}}','{{title}}')">删除此日记</button>
+				<button class="btn btn-danger noteDel" style='margin-top:10px' onclick="checkDelNote('{{../account.id}}','{{stu_account}}','{{title}}')">删除此日记</button>
 		       	</div>
 		      </div>
 		      </br>
@@ -58,11 +57,11 @@
 				var value = ($(this)[0].innerHTML=='展开内容') ?'收起内容':'展开内容';
 				$(this).html(value);
 			})
-			function checkDelNote(account, user_account, title){
+		});
+		function checkDelNote(account, user_account, title){
 			if(confirm('是否要删除'+user_account+'的'+title+'?')==true){
 				window.location='/admin/'+account+'/note_del/'+user_account+'/'+title;
 			}
 		}
-		});
 	</script>
 {{/section}}

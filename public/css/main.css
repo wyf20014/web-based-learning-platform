@@ -3,14 +3,34 @@
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
+body{background-color: #FFFFFD}
+.navbar-right{ margin-right: 10px;}
+#logo{ margin-left:10px; margin-right: 20px; font-size: 22px;}
+.nav-pills>li>a{background-color: #CCCCCC; color:white;text-align: center;font-size: 16px}
+.nav-pills>li>a:hover{color:#428bca}
 
-a.currency {
-    text-decoration: none;
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
 }
-.currency.selected {
-    font-weight: bold;
-    font-size: 150%;
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 999px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
 }
+
+
 
 
 

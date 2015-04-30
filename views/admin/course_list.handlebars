@@ -2,7 +2,7 @@
 <div class="col-sm-9">
 	<div class="row">
 		<div class="col-sm-9">
-	                <button class="btn btn-info" onclick="window.location='/admin/{{account.id}}/upload_course'">上传课程</button>
+	                <button class="btn btn-info" onclick="window.location='/admin/{{account.id}}/course_upload'">上传课程</button>
 	            </div>
 	</div>
 	<div class="row">
@@ -21,7 +21,7 @@
 			       		<h4>{{name}}</h4>
 			        	</a>
 			        <p>课程简介:{{info}}</p>
-			        <p><a href="/admin/{{../account.id}}/course_update/{{name}}" class="btn btn-primary" role="button">修改此课程</a> <a href="/admin/{{../account.id}}/course_del/{{name}}" class="btn btn-danger" role="button">删除此课程</a></p>
+			        <p><a href="#" class="btn btn-primary" role="button" onclick="window.location='/admin/{{../account.id}}/course_update/{{name}}'">修改此课程</a> <a href="#" class="btn btn-danger" role="button" onclick="checkDelCourse('{{../account.id}}','{{name}}')">删除此课程</a></p>
 			      </div>
 			    </div>
 			  </div>
@@ -42,5 +42,11 @@
 			$('#header_nav li').eq(4).addClass('active');
 			$('#admin_nav li').eq(2).addClass('active');
 		});
+
+		function checkDelCourse(account, name){
+			if(confirm('是否要删除'+name+'?')==true){
+				window.location='/admin/'+account+'/course_del/'+name;
+			}
+		}
 	</script>
 {{/section}}

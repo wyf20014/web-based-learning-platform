@@ -12,7 +12,7 @@
 		    <div class="thumbnail">
 		      <div class="caption">
 		      <div class="row">
-		      	<div class="col-sm-8" style="text-align:center">
+		      	<div class="col-sm-offset-1 col-sm-8">
 				<h3>{{name}}</h3>
 		       	</div>
 		       </div>
@@ -23,7 +23,8 @@
 		       	</div>
 		       	<div class="col-sm-2">
 		       		<br>
-				<button class="btn btn-danger noteControl" onclick="window.location='/question/{{_id}}/preferences'">删除此问题</button>
+				<button class="btn btn-primary" onclick="window.location='/question/{{_id}}/preferences'">查看此问题</button>
+				<button class="btn btn-danger" style='margin-top:10px' onclick="checkDelQuestion('{{../account.id}}','{{stu_account}}','{{name}}')">删除此问题</button>
 		       	</div>
 		      </div>
 		       <div class="row note-content">
@@ -53,5 +54,11 @@
 			$('#header_nav li').eq(4).addClass('active');
 			$('#admin_nav li').eq(4).addClass('active');
 		});
+
+		function checkDelQuestion(account, user_account, name){
+			if(confirm('是否要删除'+user_account+'的'+name+'?')==true){
+				window.location='/admin/'+account+'/question_del/'+name;
+			}
+		}
 	</script>
 {{/section}}

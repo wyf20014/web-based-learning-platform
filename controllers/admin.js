@@ -3,6 +3,8 @@ var Student = require('../models/student.js');
 var Course = require('../models/course.js');
 var Note = require('../models/note.js');
 var Question = require('../models/question.js');
+var Answer = require('../models/answer.js');
+var Video= require('../models/video.js');
 
 var adminViewModel = require('../viewModels/admin.js');
 var studentViewModel = require('../viewModels/student.js');
@@ -19,12 +21,15 @@ module.exports = {
 		app.get('/admin/:id/admin_home', this.home);
 
 		app.get('/admin/:id/course_list', this.courseList);
+		app.get('/admin/:id/course_upload', this.courseUpload);
+		app.get('/admin/:id/course_del/:name', this.courseDel);
 
 		app.get('/admin/:id/student_list', this.studentList);
 		app.get('/admin/:id/student_update/:account', this.studentUpdate);
 		app.post('/admin/:id/student_update/:account', this.processStudentUpdate);
 
 		app.get('/admin/:id/question_list', this.questionList);
+		app.get('/admin/:id/question_del/:name', this.questionDel);
 
 		app.get('/admin/:id/note_list', this.noteList);
 		app.get('/admin/:id/note_del/:student/:title', this.noteDel);
@@ -76,12 +81,78 @@ module.exports = {
 		});
 	},
 
+	courseUpload: function(req, res, next) {
+		if(req.session.role != 'admin') return next();
+		if(req.session.account.id != req.params.id) return next();
+		res.render('admin/course_upload');
+	},
+
+	courseDel: function(req, res, next){
+		if(req.session.role != 'admin')  return next();
+		if(req.session.account.id != req.params.id) return next();
+		Course.remove({name :req.params.name }, function(error){
+		    if(error) {
+		        req.session.flash = {
+				type: 'danger',intro: '',
+				message: '删除失败，数据库发生了问题，请重试！',
+			};
+			return res.redirect(303, '/admin/'+req.session.account.id+'/course_list');
+		    } else {
+		    	Video.remove({course_name : req.params.name }, function(error){
+		   		 if(error) {
+		   		 	req.session.flash = {
+						type:'success', intro:'',
+						message:'删除 '+req.params.name +' 成功！',
+					}
+					return res.redirect(303, '/admin/'+req.session.account.id+'/course_list');
+				    } else {
+				       	req.session.flash = {
+						type:'success', intro:'',
+						message:'删除 '+req.params.name +' 成功！',
+					}
+					res.redirect(303, '/admin/' + req.session.account.id +'/course_list');
+		 		   }
+			});
+		    }
+		});
+	},
+
 	questionList: function(req, res, next) {
 		if(req.session.role != 'admin') return next();
 		if(req.session.account.id != req.params.id) return next();
 		Question.find(function(err, questions) {
 			if(err) return next(err);
 			res.render('admin/question_list', questionViewModel.getQuestionList(questions,''));
+		});
+	},
+
+	questionDel: function(req, res, next){
+		if(req.session.role != 'admin')  return next();
+		if(req.session.account.id != req.params.id) return next();
+		Question.remove({name :req.params.name }, function(error){
+		    if(error) {
+		        req.session.flash = {
+				type: 'danger',intro: '',
+				message: '删除失败，数据库发生了问题，请重试！',
+			};
+			return res.redirect(303, '/admin/'+req.session.account.id+'/question_list');
+		    } else {
+		    	Answer.remove({question_name : req.params.name }, function(error){
+		   		 if(error) {
+		   		 	req.session.flash = {
+						type:'success', intro:'',
+						message:'关于 '+req.params.name +' 的问题删除成功！',
+					}
+					return res.redirect(303, '/admin/'+req.session.account.id+'/question_list');
+				    } else {
+				       	req.session.flash = {
+						type:'success', intro:'',
+						message:'关于 '+req.params.name +' 的问题删除成功！',
+					}
+					res.redirect(303, '/admin/' + req.session.account.id +'/question_list');
+		 		   }
+			});
+		    }
 		});
 	},
 
@@ -107,7 +178,7 @@ module.exports = {
 		    } else {
 		       	req.session.flash = {
 				type:'success', intro:'',
-				message:req.params.title+'日记删除成功！',
+				message:req.params.student+'的'+req.params.title+'删除成功！',
 			}
 			res.redirect(303, '/admin/' + req.session.account.id +'/note_list');
 		    }
