@@ -1,0 +1,47 @@
+{{> admin_nav}}
+<div class="col-sm-9" id='container'>
+{{#if students}}
+	<div class="row">
+		<div class="col-sm-9">
+	                <h4>学生管理</h4>
+	            </div>
+	</div>
+	
+	{{#each students}}
+		  <div class="col-sm-12">
+		    <div class="thumbnail">
+		      <div class="caption">
+		       <div class='row'>
+			<div class="col-sm-offset-1 col-sm-8">
+				<p><span style='color:#428bca'>学生账号:</span>&nbsp;&nbsp;{{account}}</p>
+				<p><span style='color:#428bca'>学生姓名:</span>&nbsp;&nbsp;{{name}}</p>
+				<p><span style='color:#428bca'>经验值:</span>&nbsp;&nbsp;{{exp}}</p>
+		       	</div>
+		       	<div class="col-sm-2">
+		       		<br>
+				<button class="btn btn-info noteControl" onclick="window.location='/admin/{{../account.id}}/student_update/{{account}}'">修改其信息</button>
+		       	</div>
+		      </div>
+		     </div>
+		    </div>
+		  </div>
+		
+	{{/each}}
+	
+{{else}}
+<div class='row'>
+	<div class="col-sm-5">
+		<h4>没有学生</h4>
+	</div>
+</div>
+{{/if}}
+</div>
+
+{{#section 'jquery'}}
+	<script>
+		$('document').ready(function(){
+			$('#header_nav li').eq(4).addClass('active');
+			$('#admin_nav li').eq(1).addClass('active');
+		});
+	</script>
+{{/section}}

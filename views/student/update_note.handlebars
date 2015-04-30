@@ -1,24 +1,24 @@
 {{>student_nav}}
 <div class="col-sm-9">
-	<h3>&nbsp;&nbsp;写日记</h3><br>
+	<h3>&nbsp;&nbsp;修改日记</h3><br>
 	<div class="formContainer">
-	    <form class="form-horizontal newsletterForm" role="form" action="/student/{{account.id}}/write_note" method="POST">
+	    <form class="form-horizontal newsletterForm" role="form" action="/student/{{account.id}}/update_note/{{title}}" method="POST">
 	        <div class="form-group">
 	            <label for="fieldName" class="col-sm-2 control-label">日记标题</label>
 	            <div class="col-sm-6">
-	                <input type="text" class="form-control" required  name="title" autofocus="autofocus" value='{{noteform.title}}'>
+	                <input type="text" class="form-control" disabled  name="title" autofocus="autofocus" value='{{title}}'>
 	            </div>
 	        </div>
 	        <div class="form-group">
 	            <label for="fieldTag" class="col-sm-2 control-label">日记标签</label>
 	            <div class="col-sm-6">
-	                <input type="text" class="form-control" required name="tag" value='{{noteform.tag}}'>
+	                <input type="text" class="form-control" required  name="tag" value='{{tag}}'>
 	            </div>
 	        </div>
 	        <div class="form-group">
 	            <label for="fieldContent" class="col-sm-2 control-label">日记内容</label>
 	            <div class="col-sm-9">
-	                <textarea name="content" class='form-control' rows="15">{{noteform.content}}</textarea>
+	                <textarea  class='form-control' rows="15" name="content">{{content}}</textarea>
 	            </div>
 	        </div>
 	        <div class="form-group">

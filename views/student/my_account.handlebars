@@ -1,0 +1,36 @@
+{{>student_nav}}
+
+<div class="col-sm-9">
+	<div class='row'>
+		<div class="col-sm-4">
+			<h4>用户名:&nbsp;&nbsp;{{account.name}}</h4>
+		</div>
+	</div>
+	<div class='row'>
+		<div class="col-sm-4">
+			<h4>姓名:&nbsp;&nbsp;{{name}}</h4>
+		</div>
+	</div>
+	<div class='row'>
+		<div class="col-sm-4">
+			<h4>经验值:&nbsp;&nbsp;{{exp}}</h4>
+		</div>
+	</div>
+	<div class='row'>
+		<div class="col-sm-4">
+			<h4>密码:&nbsp;&nbsp;XXXXXXX</h4>
+		</div>
+		<div class="col-sm-1">
+	                <button class="btn btn-info" onclick="window.location='/student/{{account.id}}/update_password'">修改密码</button>
+	            </div>
+	</div>
+</div>
+
+{{#section 'jquery'}}
+	<script>
+		$('document').ready(function(){
+			$('#header_nav li').eq(4).addClass('active');
+			$('#student_nav li').eq(4).addClass('active');
+		});
+	</script>
+{{/section}}

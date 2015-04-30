@@ -1,0 +1,68 @@
+{{> admin_nav}}
+<div class="col-sm-9" id='container'>
+{{#if notes}}
+	<div class="row">
+		<div class="col-sm-9">
+	                <h4>日记管理</h4>
+	            </div>
+	</div>
+	
+	{{#each notes}}
+		  <div class="col-sm-12">
+		    <div class="thumbnail">
+		      <div class="caption">
+		      <div class="row">
+		      	<div class="col-sm-3" style="text-align:center">
+				<h4>{{title}}</h4>
+		       	</div>
+			<div class="col-sm-6">
+				<p>作者:{{stu_account}}</p><p>编写时间:{{time}}</p>
+		       	</div>
+		       	<div class="col-sm-2">
+		       		<br>
+				<button class="btn btn-info noteControl">展开内容</button>
+				<br>
+				<button class="btn btn-danger noteDel" onclick="checkDelNote('{{../account.id}}','{{stu_account}}','{{title}}')">删除此日记</button>
+		       	</div>
+		      </div>
+		      </br>
+		       <div class="row note-content" style='display:none'>
+			        <div class='col-sm-10 col-sm-offset-1'>
+			       	 <p>{{content}}</p>
+			        </div>
+		       </div>
+		     </div>
+		    </div>
+		  </div>
+		
+	{{/each}}
+	
+{{else}}
+<div class='row'>
+	<div class="col-sm-5">
+		<h4>没有日记</h4>
+	</div>
+</div>
+{{/if}}
+</div>
+
+{{#section 'jquery'}}
+	<script>
+		$('document').ready(function(){
+			$('#header_nav li').eq(4).addClass('active');
+			$('#admin_nav li').eq(3).addClass('active');
+			$('#container').on('click','.noteControl',function(e){
+				e.stopPropagation();
+				console.log($(this).parents('.thumbnail').eq(0).find('.note-content').eq(0));
+				$(this).parents('.thumbnail').eq(0).find('.note-content').eq(0).toggle(500);
+				var value = ($(this)[0].innerHTML=='展开内容') ?'收起内容':'展开内容';
+				$(this).html(value);
+			})
+			function checkDelNote(account, user_account, title){
+			if(confirm('是否要删除'+user_account+'的'+title+'?')==true){
+				window.location='/admin/'+account+'/note_del/'+user_account+'/'+title;
+			}
+		}
+		});
+	</script>
+{{/section}}

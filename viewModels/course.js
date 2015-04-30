@@ -6,7 +6,7 @@ module.exports = {
 
 	getCourseList : function(courses, tag){
 		var vm = _.map(courses,function(course){
-			return _.pick(course,'name','img');
+			return _.pick(course,'name','img','info');
 		});
 		return {courses:vm,tag:tag};
 	},

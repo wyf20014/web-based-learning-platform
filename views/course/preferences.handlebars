@@ -1,6 +1,7 @@
 {{>course_nav}}
 <div class="col-sm-9">
 <div class="panel panel-default">
+<input type='hidden' id='tag' value='{{tag}}'>
   <div class="panel-heading">
     <h2>{{name}}</h2>
     {{#if role.student}}
@@ -25,12 +26,12 @@
   </div>
 </div>
 </div>
-<input type='hidden' id='tag_id' val='{{tag}}'>
+
 {{#section 'jquery'}}
   <script>
     $('document').ready(function(){
       $('#header_nav li').eq(1).addClass('active');
-      var tag =  '#'+$('#tag_id').val();
+      var tag =  '#'+$("#tag").val();
       $(tag).addClass('active');
     });
   </script>

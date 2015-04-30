@@ -16,9 +16,11 @@
 
         <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
         <style>
-        	body{background-color: #FFFFFD};
+        	body{background-color: #FFFFFD}
 	.navbar-right{ margin-right: 10px;}
 	#logo{ margin-left:10px; margin-right: 20px; font-size: 22px;}
+	.nav-pills>li>a{background-color: #CCCCCC; color:white;text-align: center;font-size: 16px}
+	.nav-pills>li>a:hover{color:#428bca}
         </style>
         <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="/css/main.css">
@@ -32,6 +34,7 @@
 	
 	{{> header}}
 	<div class="container">
+		<br>
 	    	{{#if flash}}
 	    		<div class="alert alert-dismissible alert-{{flash.type}}">
 	    			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>

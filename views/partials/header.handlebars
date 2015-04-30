@@ -15,17 +15,19 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav" id='header_nav'>
         <li><a href="/">首页</a></li>
-        <li><a href="/course/list">课程</a></li>
-        <li><a href="/course/list">日记</a></li>
-        <li><a href="#">问答</a></li>
+        <li><a href="/course/list">课程学习</a></li>
+        <li><a href="/note/list">日记分享</a></li>
+        <li><a href="/question/list">问答社区</a></li>
         {{#if role}}
           {{#if role.admin}}
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">管理中心<span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href='/admin/{{account.id}}/home'>管理主页</a></li>
-                  <li><a href='/admin/{{account.id}}/course'>课程管理</a></li>
-                  <li><a href='/admin/{{account.id}}/student'>学生管理</a></li>
+                  <li><a href='/admin/{{account.id}}/admin_home'>管理主页</a></li>
+                  <li><a href='/admin/{{account.id}}/student_list'>学生管理</a></li>
+                  <li><a href='/admin/{{account.id}}/course_list'>课程管理</a></li>
+                  <li><a href='/admin/{{account.id}}/note_list'>日记管理</a></li>
+                  <li><a href='/admin/{{account.id}}/question_list'>问答管理</a></li>
                 </ul>
               </li>
           {{/if}}
@@ -51,6 +53,7 @@
       </form>
       {{#if role}}
       <button type="button" class="btn btn-default navbar-btn navbar-right" onclick="window.location='/quit'">退出</button>
+      <p class="navbar-text navbar-right">欢迎你，<a href="/student/{{account.id}}/my_home" class="navbar-link">{{account.name}}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
      {{else}}
      <button type="button" class="btn btn-default navbar-btn navbar-right" onclick="window.location='/student/register'">注册</button>
      <button type="button" class="btn btn-primary navbar-btn navbar-right" onclick="window.location='/student/login'">登录</button>

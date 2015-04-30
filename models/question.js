@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var Answer = require('./answer.js') 
 
 var questionSchema = mongoose.Schema({
     name: String,
@@ -6,8 +7,13 @@ var questionSchema = mongoose.Schema({
     content: String,
     tag: String,
     stu_account: String,  
-    answers_id:[ String ], 
+    state:{type:String, default:'unsolved'},
 });
+
+questionSchema.methods.getAnswers = function(cb){
+    return Answer.find({ question_name: this.name }, cb);
+};
+
 var Question = mongoose.model('Question', questionSchema);
 
 module.exports = Question;

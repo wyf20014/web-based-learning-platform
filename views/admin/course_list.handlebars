@@ -1,0 +1,46 @@
+{{>admin_nav}}
+<div class="col-sm-9">
+	<div class="row">
+		<div class="col-sm-9">
+	                <button class="btn btn-info" onclick="window.location='/admin/{{account.id}}/upload_course'">上传课程</button>
+	            </div>
+	</div>
+	<div class="row">
+		<div class="col-sm-9">
+	                <br>
+	            </div>
+	</div>
+	<div class="row">
+		{{#if courses}}
+		{{#each courses}}
+			  <div class="col-sm-6 col-md-4">
+			    <div class="thumbnail">
+			      <img src="{{img}}" alt="{{name}}">
+			      <div class="caption">
+			       	<a href="/course/{{name}}/preferences">
+			       		<h4>{{name}}</h4>
+			        	</a>
+			        <p>课程简介:{{info}}</p>
+			        <p><a href="/admin/{{../account.id}}/course_update/{{name}}" class="btn btn-primary" role="button">修改此课程</a> <a href="/admin/{{../account.id}}/course_del/{{name}}" class="btn btn-danger" role="button">删除此课程</a></p>
+			      </div>
+			    </div>
+			  </div>
+		 {{/each}}
+		 {{else}}
+		 <div class="col-sm-4">
+			<h4>暂时没有课程！</h4>
+		</div>
+		<div class="col-sm-1">
+			 <button class="btn btn-info" onclick="window.location='/admin/{{account.id}}/upload_course'">上传课程</button>
+		</div>
+		 {{/if}}
+	</div>
+</div>
+{{#section 'jquery'}}
+	<script>
+		$('document').ready(function(){
+			$('#header_nav li').eq(4).addClass('active');
+			$('#admin_nav li').eq(2).addClass('active');
+		});
+	</script>
+{{/section}}

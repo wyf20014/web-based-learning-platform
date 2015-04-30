@@ -20,21 +20,22 @@
 		      <div class="caption">
 		        <h3>{{title}}</h3>
 		        <p>{{content}}</p>
-		        <p><a href="{{content}}" class="btn btn-primary" role="button">修改</a> <a href="#" class="btn btn-danger" role="button">删除</a></p>
+		        <p><a href="/student/{{../account.id}}/update_note/{{title}}" class="btn btn-primary" role="button">修改</a> <a 
+		        class="btn btn-danger" role="button" onclick="checkDelNote('{{../account.id}}','{{title}}')">删除</a></p>
 		      </div>
 		    </div>
 		  </div>
-	
+		
 	{{/each}}
 	
 {{else}}
 <div class='row'>
-	<div class="col-sm-1">
-                <button class="btn btn-info" onclick="window.location='/student/{{account.id}}/write_note'">写日记</button>
-            </div>
 	<div class="col-sm-5">
 		<h4>你还没写过日记，快去试试吧！</h4>
 	</div>
+	<div class="col-sm-1">
+                <button class="btn btn-info" onclick="window.location='/student/{{account.id}}/write_note'">写日记</button>
+            </div>
 </div>
 {{/if}}
 </div>
@@ -45,5 +46,10 @@
 			$('#header_nav li').eq(4).addClass('active');
 			$('#student_nav li').eq(2).addClass('active');
 		});
+		function checkDelNote(account, title){
+			if(confirm('是否要删除'+title+'?')==true){
+				window.location='/student/'+account+'/del_note/'+title;
+			}
+		}
 	</script>
 {{/section}}

@@ -1,5 +1,7 @@
 var Student = require('../models/student.js');
 var Note = require('../models/note.js');
+var Question = require('../models/question.js');
+var Answer = require('../models/answer.js');
 var studentViewModel = require('../viewModels/student.js');
 
 module.exports = {
@@ -13,12 +15,26 @@ module.exports = {
 
 		app.get('/student/:id/my_home', this.myHome);
 		app.get('/student/:id/my_course', this.myCourse);
-		app.get('/student/:id/my_note', this.myNote);
+		
+		//问答相关
 		app.get('/student/:id/my_question', this.myQuestion);
+		app.get('/student/:id/write_question', this.writeQuestion);
+		app.post('/student/:id/write_question', this.processWriteQuestion);
+		app.post('/student/:id/write_answer', this.processWriteAnswer);
 
+		//日记相关
+		app.get('/student/:id/my_note', this.myNote);
 		app.get('/student/:id/write_note', this.writeNote);
 		app.post('/student/:id/write_note', this.processWriteNote);
-		
+		app.get('/student/:id/update_note/:title', this.updateNote);
+		app.post('/student/:id/update_note/:title', this.processUpdateNote);
+		app.get('/student/:id/del_note/:title', this.delNote);
+
+		//账户相关
+		app.get('/student/:id/my_account', this.myAccount);
+		app.get('/student/:id/update_password', this.updatePassword);
+		app.post('/student/:id/update_password', this.processUpdatePassword);
+
 		
 	},
 
@@ -49,10 +65,6 @@ module.exports = {
 					account: req.body.account,
 					name: req.body.name,
 					password: req.body.password1,
-					courses:[{
-						course_name:'Java基础课程第一天',
-						video_name:'基本常识'
-					}],
 				});
 				c.save(function(err) {
 					if(err) {
@@ -169,7 +181,7 @@ module.exports = {
 							type: 'danger',intro: '',
 							message: '数据库发生了问题，请重试一次',
 						};
-						return res.redirect(303, '/student/register');
+						return res.redirect(303, '/student/'+req.session.account.id+'/write_note');
 					}
 					if(req.xhr) return res.json({ success: true });
 					req.session.flash = {
@@ -184,12 +196,204 @@ module.exports = {
 		});
 	},
 
+	updateNote: function(req, res, next){
+		if(req.session.role != 'student')  return next();
+		if(req.session.account.id != req.params.id) return next();
+		Note.findOne({stu_account: req.session.account.name, title:req.params.title},function(err,note){
+			res.render('student/update_note',note);
+		});
+	},
+
+	processUpdateNote: function(req, res, next) {
+		var conditions = {stu_account: req.session.account.name, title:req.params.title};
+		var update     = {$set : {tag : req.body.tag, content : req.body.content}};
+		var options    = {upsert : true};
+		Note.update(conditions, update, options, function(error){
+    			if(error) {
+      				  req.session.flash = {
+					type: 'danger',intro: '',
+					message: '修改失败，数据库发生了问题，请重试！',
+				};
+				return res.redirect(303, '/student/'+req.session.account.id+'/update_note/'+req.params.title);
+   			 } else {
+      			  	req.session.flash = {
+					type:'success', intro:'',
+					message:'日记修改成功！',
+				}
+				res.redirect(303, '/student/' + req.session.account.id +'/my_note');
+   			 }
+		});
+	},
+
+	delNote: function(req, res, next){
+		if(req.session.role != 'student')  return next();
+		if(req.session.account.id != req.params.id) return next();
+		Note.remove({stu_account: req.session.account.name, title:req.params.title}, function(error){
+		    if(error) {
+		        req.session.flash = {
+				type: 'danger',intro: '',
+				message: '删除失败，数据库发生了问题，请重试！',
+			};
+			return res.redirect(303, '/student/'+req.session.account.id+'/my_note');
+		    } else {
+		       	req.session.flash = {
+				type:'success', intro:'',
+				message:req.params.title+'日记删除成功！',
+			}
+			res.redirect(303, '/student/' + req.session.account.id +'/my_note');
+		    }
+		});
+	},
+
 	myQuestion: function(req, res, next) {
 		if(req.session.role != 'student')  return next();
 		if(req.session.account.id != req.params.id) return next();
-		res.render('student/my_question');
+		Student.findById(req.params.id, function(err, student) {
+			if(err) return next(err);
+			if(!student) return next(); 	// pass this on to 404 handler
+			student.getAnswers(function(err, answers) {
+				if(err) return next(err);
+				student.getQuestions(function(err, questions){
+					if(err) return next(err);
+					res.render('student/my_question', studentViewModel.getMyQuestions(answers, questions));
+				})
+			});
+		});
+	},
+
+	writeQuestion: function(req, res, next) {
+		if(req.session.role != 'student')  return next();
+		if(req.session.account.id != req.params.id) return next();
+		if(!req.session.questionform) req.session.questionform = {'name':'','tag':'','content':''};
+		res.locals.questionform = req.session.questionform;
+		res.render('student/write_question');
+	},
+
+	processWriteQuestion: function(req, res, next) {
+		req.session.questionform = { 
+			'name':req.body.name, 
+			'tag':req.body.tag,
+			'content':req.body.content,
+			'stu_account':req.session.account.name,
+		};
+		Question.findOne({name:req.body.name},function(err, question){
+			if(err) return next(err);
+			if(question) {
+				req.session.flash = {
+					type:'danger', intro:'',
+					message:'已经有同名称的问题了！!',
+				}
+				return res.redirect(303, '/student/'+req.session.account.id+'/write_question');
+			}
+			else{
+				var c = new Question(req.session.questionform);
+				c.save(function(err) {
+					if(err) {
+						if(req.xhr) return res.json({ error: '提交失败.' });
+						req.session.flash = {
+							type: 'danger',intro: '',
+							message: '数据库发生了问题，请重试一次',
+						};
+						return res.redirect(303, '/student/'+req.session.account.id+'/write_question');
+					}
+					if(req.xhr) return res.json({ success: true });
+					req.session.flash = {
+						type:'success', intro:'',
+						message:'问题提交成功！',
+					}
+					delete req.session.questionform;
+					res.redirect(303, '/question/list');
+				});
+				
+			}
+		});
 	},
 
 
+	processWriteAnswer: function(req, res, next) {
+		req.session.answerform = { 
+			'content':req.body.content,
+			'stu_account':req.session.account.name,
+			'question_name':req.session.question.name,
+		};
+		var c = new Answer(req.session.answerform);
+		c.save(function(err) {
+			if(err) {
+				if(req.xhr) return res.json({ error: '提交失败.' });
+				req.session.flash = {
+					type: 'danger',intro: '',
+					message: '数据库发生了问题，请重试一次',
+				};
+				return res.redirect(303, '/question/'+req.session.question.id+'/preferences');
+			}
+			if(req.xhr) return res.json({ success: true });
+			req.session.flash = {
+				type:'success', intro:'',
+				message:'回答提交成功！',
+			}
+			delete req.session.answerform;
+			res.redirect(303, '/question/'+req.session.question.id+'/preferences');
+		});
+	},
 
+
+	myAccount:function(req, res, next) {
+		if(req.session.role != 'student')  return next();
+		if(req.session.account.id != req.params.id) return next();
+		Student.findOne({account:req.session.account.name},function(err, student){
+			if(err) return next(err);
+			if(!student) return next(); 
+			res.render('student/my_account',studentViewModel.getMyAccount(student));
+		})
+	},
+
+	updatePassword: function(req, res, next) {
+		if(req.session.role != 'student')  return next();
+		if(req.session.account.id != req.params.id) return next();
+		res.render('student/update_password');
+	},
+
+	processUpdatePassword: function(req, res, next) {
+		if(req.session.role != 'student')  return next();
+		if(req.session.account.id != req.params.id) return next();
+		if(req.body.password1!==req.body.password2) {
+			req.session.flash = {
+				type:'danger', intro:'',
+				message:'两次密码输入不一致!',
+			}
+			return res.redirect(303, '/student/'+req.session.account.id+'/update_password');
+		}
+		else{
+			Student.findOne({account:req.session.account.name, password:req.body.oldpassword},function(err, student){
+				if(err) return next(err);
+				if(!student){
+					req.session.flash = {
+						type:'danger', intro:'',
+						message:'原密码错误!',
+					}
+					return res.redirect(303, '/student/'+req.session.account.id+'/update_password');
+				}
+				else{
+					var conditions = {account: req.session.account.name};
+					var update     = {$set : {password : req.body.password1}};
+					var options    = {upsert : true};
+					Student.update(conditions, update, options, function(error){
+			    			if(error) {
+			      				  req.session.flash = {
+								type: 'danger',intro: '',
+								message: '修改失败，数据库发生了问题，请重试！',
+							};
+							return res.redirect(303, '/student/'+req.session.account.id+'/update_note/'+req.params.title);
+			   			 } else {
+			      			  	req.session.flash = {
+								type:'success', intro:'',
+								message:'密码修改成功！',
+							}
+							res.redirect(303, '/student/' + req.session.account.id +'/my_account');
+			   			 }
+					});
+				}
+			});
+		}
+	},
 };

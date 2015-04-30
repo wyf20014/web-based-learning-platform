@@ -19,7 +19,7 @@ studentSchema.methods.getNotes = function(cb){
 studentSchema.methods.getAnswers = function(cb){
     return Answer.find({ stu_account: this.account }, cb);
 };
-studentSchema.methods.getQusetions = function(cb){
+studentSchema.methods.getQuestions = function(cb){
     return Question.find({ stu_account: this.account }, cb);
 };
 

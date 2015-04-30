@@ -1,0 +1,57 @@
+{{> admin_nav}}
+<div class="col-sm-9" id='container'>
+{{#if questions}}
+	<div class="row">
+		<div class="col-sm-9">
+	                <h4>问答管理</h4>
+	            </div>
+	</div>
+	
+	{{#each questions}}
+		  <div class="col-sm-12">
+		    <div class="thumbnail">
+		      <div class="caption">
+		      <div class="row">
+		      	<div class="col-sm-8" style="text-align:center">
+				<h3>{{name}}</h3>
+		       	</div>
+		       </div>
+		       <div class='row'>
+			<div class="col-sm-offset-2 col-sm-6">
+				<p><span style='color:#428bca'>提问者:</span>&nbsp;&nbsp;{{stu_account}}</p>
+				<p><span style='color:#428bca'>提问时间:</span>&nbsp;&nbsp;{{time}}</p>
+		       	</div>
+		       	<div class="col-sm-2">
+		       		<br>
+				<button class="btn btn-danger noteControl" onclick="window.location='/question/{{_id}}/preferences'">删除此问题</button>
+		       	</div>
+		      </div>
+		       <div class="row note-content">
+			        <div class='col-sm-10 col-sm-offset-1' >
+			        <h4 style='color:#428bca'>问题内容:</h4>
+			       	 <p>{{content}}</p>
+			        </div>
+		       </div>
+		     </div>
+		    </div>
+		  </div>
+		
+	{{/each}}
+	
+{{else}}
+<div class='row'>
+	<div class="col-sm-5">
+		<h4>没有问题</h4>
+	</div>
+</div>
+{{/if}}
+</div>
+
+{{#section 'jquery'}}
+	<script>
+		$('document').ready(function(){
+			$('#header_nav li').eq(4).addClass('active');
+			$('#admin_nav li').eq(4).addClass('active');
+		});
+	</script>
+{{/section}}
