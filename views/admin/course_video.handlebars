@@ -1,0 +1,78 @@
+{{>admin_nav}}
+<div class="col-sm-9">
+	<div class="panel panel-default">
+		<div class="panel-heading" style='text-align:center'>
+		<h2>{{name}}</h2>
+		</div>
+	<div class="panel-body">
+		<div class="list-group">
+			<h4 style='color:#428bca'>课程章节</h4>
+			{{#if videos}}
+				<table>
+					<thead>
+						<tr>
+							<th>章节号</th><th>章节名</th><th>视频地址</th><th>操作</th>	
+						</tr>
+					</thead>
+					<tbody>
+						{{#each videos}}
+						<tr>
+							<td>{{index}}</td>
+							<td>{{videoName}}</td>
+							<td>{{url}}</td>
+							<td>
+								<a  class="btn btn-danger" role="button" onclick="checkDelVideo('{{../account.id}}','{{videoName}}','{{../name}}')">删除</a>
+							</td>
+						</tr>
+						{{/each}}
+					</tbody>
+					
+				</table>
+			{{else}}
+				 <p>&nbsp;&nbsp;&nbsp;&nbsp;该课程下暂无视频</p>
+			{{/if}}
+		</div>
+	</div>
+</div>
+	<h4 style='color:#428bca'>&nbsp;&nbsp;添加章节</h4><br>
+	<form class="form-horizontal" role="form" 
+		enctype="multipart/form-data" method="POST"
+		action="/admin/{{account.id}}/video_upload/{{_id}}">
+	<div class="form-group">
+		<label for="fieldName" class="col-sm-2 control-label">章节名称</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control"  required
+			id="fieldName" name="name">
+			<input type='hidden' class='form-control' required id='fieldCourse' name='course' value='{{name}}'>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="fieldVideo" class="col-sm-2 control-label">上传视频</label>
+		<div class="col-sm-4">
+			<input type="file" class="form-control" required accept="audio/mp4, video/mp4"
+				id="fieldVideo" data-url="/upload" name="video">
+			<input type='hidden' class="form-control" required id='fieldIndex' name='index' value='{{index}}'>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-offset-2 col-sm-4">
+			<button type="submit" class="btn btn-primary">提交</button>
+		</div>
+	</div>
+</form>
+</div>
+
+{{#section 'jquery'}}
+	<script>
+		$('document').ready(function(){
+			$('#header_nav li').eq(4).addClass('active');
+			$('#admin_nav li').eq(2).addClass('active');
+		});
+
+		function checkDelVideo(account, video, course){
+			if(confirm('是否要删除'+video+'?')==true){
+				window.location='/admin/'+account+'/video_del/'+course+'/'+video;
+			}
+		}
+	</script>
+{{/section}}

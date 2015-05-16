@@ -6,14 +6,15 @@ module.exports = {
 
 	getCourseList : function(courses, tag){
 		var vm = _.map(courses,function(course){
-			return _.pick(course,'name','img','info');
+			return _.pick(course,'name','img','info','_id');
 		});
 		return {courses:vm,tag:tag};
 	},
-
 	getCoursePreferences : function(course,videos){
-		var vm = _.omit(course,'_id');
+		var length = parseInt(videos.length)+1;
+		var vm = _.omit(course,'__v');
 		return  _.extend(vm, {
+			index:length,
 			videos: videos.map(function(video){
 				return {
 					videoName: video.name,

@@ -9,7 +9,7 @@ body{background-color: #FFFFFD}
 .nav-pills>li>a{background-color: #CCCCCC; color:white;text-align: center;font-size: 16px}
 .nav-pills>li>a:hover{color:#428bca}
 
-
+th{color:#428bca;text-align: center}
 .btn-file {
     position: relative;
     overflow: hidden;

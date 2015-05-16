@@ -1,29 +1,43 @@
 {{>course_nav}}
 <div class="col-sm-9">
-<div class="panel panel-default">
-<input type='hidden' id='tag' value='{{tag}}'>
-  <div class="panel-heading">
-    <h2>{{name}}</h2>
-    {{#if role.student}}
-     <p class='text-right'><button type="button" class="btn btn-primary" >参加此课程</button></p>
-    {{/if}}
-  </div>
-  <div class="panel-body">
-    <h4>课程简介</h4>
-    <p>&nbsp;&nbsp;&nbsp;&nbsp;{{info}}</p>
-  </div>
-  <!-- List group -->
-  <div class="panel-body">
-    <div class="list-group">
-    <h4>课程章节</h4>
-    {{#each videos}}
-    <a href="/video/play/{{../tag}}/{{../name}}/{{videoName}}" class="list-group-item" target="_blank">
-      第{{index}}课: {{videoName}}
-    </a>
-    {{/each}}
-  </div>
-  </div>
-</div>
+      <div class="panel panel-default">
+                <input type='hidden' id='tag' value='{{tag}}'>
+                <div class="panel-heading" style='text-align:center'>
+                       <h2>{{name}}</h2>
+                        {{#if role.student}}
+                        <p class='text-right'><button type="button" class="btn btn-primary" >参加此课程</button></p>
+                        {{/if}}
+                </div>
+                <div class="panel-body">
+                  <div class="col-sm-1"></div>
+                  <div class="col-sm-7">
+                      <h4 style='color:#428bca'>课程简介</h4>
+                          <p style='font-size:16px'>&nbsp;&nbsp;&nbsp;&nbsp;{{info}}</p>
+                  </div>
+                </div>
+                            <!-- List group -->
+                <div class="panel-body">
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-9">
+                    <h4 style='color:#428bca'>课程章节</h4>
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-11">
+                       <div class="list-group" style='font-size:16px'>
+                                  {{#if videos}}
+                                      {{#each videos}}
+                                              <a href="/video/play/{{../tag}}/{{../name}}/{{videoName}}" class="list-group-item" style='border-left:none;border-right:none' target="_blank">
+                                                第{{index}}课: {{videoName}}
+                                              </a>
+                                      {{/each}}
+                                      {{else}}
+                                      <p>&nbsp;&nbsp;&nbsp;&nbsp;该课程下暂无视频</p>
+                                      {{/if}}
+                             </div>
+                    </div>
+                     
+                    </div>  
+                  </div>
+      </div>
 </div>
 
 {{#section 'jquery'}}

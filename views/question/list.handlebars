@@ -1,7 +1,7 @@
 {{> question_nav}}
 <div class="col-sm-9" id='container'>
 {{#if questions}}
-	{{#if role}}
+	{{#if role.student}}
 	<div class="row">
 		<div class="col-sm-9">
 	                <button class="btn btn-info" onclick="window.location='/student/{{account.id}}/write_question'">提出问题</button>

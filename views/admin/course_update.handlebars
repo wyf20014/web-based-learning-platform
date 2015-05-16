@@ -1,34 +1,39 @@
 {{>admin_nav}}
 <div class="col-sm-9">
-	<h3>&nbsp;&nbsp;上传课程</h3><br>
+	<h3>&nbsp;&nbsp;修改课程</h3><br>
 	<form class="form-horizontal" role="form" 
 		enctype="multipart/form-data" method="POST"
-		action="/admin/{{account.id}}/course_upload">
+		action="/admin/{{account.id}}/course_update/{{name}}">
 	<div class="form-group">
 		<label for="fieldName" class="col-sm-2 control-label">课程名称</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control"  required
-			id="fieldName" name="name">
+			<input type="text" class="form-control" name='name' value='{{name}}' disabled>
 		</div>
 	</div>
 	<div class="form-group">
 		<label for="fieldTag" class="col-sm-2 control-label">课程标签</label>
 		<div class="col-sm-6">
-			<input type="text" class="form-control" required 
+			<input type="text" class="form-control" required value='{{tag}}'
 				id="fieldName" name="tag">
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="fieldPhoto" class="col-sm-2 control-label">上传封面</label>
+		<label for="fieldPhoto" class="col-sm-2 control-label">当前封面</label>
 		<div class="col-sm-4">
-			<input type="file" class="form-control" required accept="image/*"
+			<img src="{{img}}">
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="fieldPhoto" class="col-sm-2 control-label">更改封面(可不选)</label>
+		<div class="col-sm-4">
+			<input type="file" class="form-control"  accept="image/*"
 				id="fieldPhoto" data-url="/upload" name="photo">
 		</div>
 	</div>
 	<div class="form-group">
 		<label for="fieldInfo" class="col-sm-2 control-label">课程简介</label>
 		<div class="col-sm-8">
-			<textarea name="info" rows='10' class="form-control" required></textarea>
+			<textarea name="info" rows='10' class="form-control" required>{{info}}</textarea>
 		</div>
 	</div>
 	<div class="form-group">
@@ -38,7 +43,6 @@
 	</div>
 </form>
 </div>
-
 {{#section 'jquery'}}
   <script>
 	$('document').ready(function(){

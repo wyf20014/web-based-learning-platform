@@ -1,7 +1,7 @@
 {{> note_nav}}
 <div class="col-sm-9" id='container'>
 {{#if notes}}
-	{{#if role}}
+	{{#if role.student}}
 	<div class="row">
 		<div class="col-sm-9">
 	                <button class="btn btn-info" onclick="window.location='/student/{{account.id}}/write_note'">写日记</button>
@@ -23,7 +23,8 @@
 				<h4>{{title}}</h4>
 		       	</div>
 			<div class="col-sm-6">
-				<p>作者:{{stu_account}}</p><p>编写时间:{{time}}</p>
+				<p><span style='color:#428bca'>作者:</span>&nbsp;&nbsp;{{stu_account}}</p>
+				<p><span style='color:#428bca'>编写时间:</span>&nbsp;&nbsp;{{time}}</p>
 		       	</div>
 		       	<div class="col-sm-2">
 		       		<br>

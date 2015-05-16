@@ -4,6 +4,11 @@ var Question = require('../models/question.js');
 var Answer = require('../models/answer.js');
 var studentViewModel = require('../viewModels/student.js');
 
+function checkStudentAccount(req, res){
+	if(!(req.session.role == 'student' && req.session.account.id == req.params.id))
+		return res.redirect(303, '/quit_error');
+}
+
 module.exports = {
 
 	registerRoutes: function(app) {
@@ -120,14 +125,12 @@ module.exports = {
 	},
 
 	myHome: function(req, res, next) {
-		if(req.session.role != 'student')  return next();
-		if(req.session.account.id != req.params.id) return next();
+		checkStudentAccount(req, res);
 		res.render('student/my_home');
 	},
 
 	myCourse: function(req, res, next) {
-		if(req.session.role != 'student')  return next();
-		if(req.session.account.id != req.params.id) return next();
+		checkStudentAccount(req, res);
 		Student.findById(req.params.id, function(err, student) {
 			if(err) return next(err);
 			if(!student) return next(); 	// pass this on to 404 handler
@@ -136,8 +139,7 @@ module.exports = {
 	},
 
 	myNote: function(req, res, next) {
-		if(req.session.role != 'student')  return next();
-		if(req.session.account.id != req.params.id) return next();
+		checkStudentAccount(req, res);
 		Student.findById(req.params.id, function(err, student) {
 			if(err) return next(err);
 			if(!student) return next(); 	// pass this on to 404 handler
@@ -149,8 +151,7 @@ module.exports = {
 	},
 
 	writeNote: function(req, res, next) {
-		if(req.session.role != 'student')  return next();
-		if(req.session.account.id != req.params.id) return next();
+		checkStudentAccount(req, res);
 		if(!req.session.noteform) req.session.noteform = {'title':'','tag':'','content':''};
 		res.locals.noteform = req.session.noteform;
 		res.render('student/write_note');
@@ -197,8 +198,7 @@ module.exports = {
 	},
 
 	updateNote: function(req, res, next){
-		if(req.session.role != 'student')  return next();
-		if(req.session.account.id != req.params.id) return next();
+		checkStudentAccount(req, res);
 		Note.findOne({stu_account: req.session.account.name, title:req.params.title},function(err,note){
 			res.render('student/update_note',note);
 		});
@@ -226,8 +226,7 @@ module.exports = {
 	},
 
 	delNote: function(req, res, next){
-		if(req.session.role != 'student')  return next();
-		if(req.session.account.id != req.params.id) return next();
+		checkStudentAccount(req, res);
 		Note.remove({stu_account: req.session.account.name, title:req.params.title}, function(error){
 		    if(error) {
 		        req.session.flash = {
@@ -246,8 +245,7 @@ module.exports = {
 	},
 
 	myQuestion: function(req, res, next) {
-		if(req.session.role != 'student')  return next();
-		if(req.session.account.id != req.params.id) return next();
+		checkStudentAccount(req, res);
 		Student.findById(req.params.id, function(err, student) {
 			if(err) return next(err);
 			if(!student) return next(); 	// pass this on to 404 handler
@@ -262,8 +260,7 @@ module.exports = {
 	},
 
 	writeQuestion: function(req, res, next) {
-		if(req.session.role != 'student')  return next();
-		if(req.session.account.id != req.params.id) return next();
+		checkStudentAccount(req, res);
 		if(!req.session.questionform) req.session.questionform = {'name':'','tag':'','content':''};
 		res.locals.questionform = req.session.questionform;
 		res.render('student/write_question');
@@ -338,8 +335,7 @@ module.exports = {
 
 
 	myAccount:function(req, res, next) {
-		if(req.session.role != 'student')  return next();
-		if(req.session.account.id != req.params.id) return next();
+		checkStudentAccount(req, res);
 		Student.findOne({account:req.session.account.name},function(err, student){
 			if(err) return next(err);
 			if(!student) return next(); 
@@ -348,14 +344,12 @@ module.exports = {
 	},
 
 	updatePassword: function(req, res, next) {
-		if(req.session.role != 'student')  return next();
-		if(req.session.account.id != req.params.id) return next();
+		checkStudentAccount(req, res);
 		res.render('student/update_password');
 	},
 
 	processUpdatePassword: function(req, res, next) {
-		if(req.session.role != 'student')  return next();
-		if(req.session.account.id != req.params.id) return next();
+		checkStudentAccount(req, res);
 		if(req.body.password1!==req.body.password2) {
 			req.session.flash = {
 				type:'danger', intro:'',
