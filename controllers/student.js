@@ -19,7 +19,10 @@ module.exports = {
 		app.post('/student/login', this.processLogin);
 
 		app.get('/student/:id/my_home', this.myHome);
+
+		//课程相关
 		app.get('/student/:id/my_course', this.myCourse);
+		app.get('/student/:id/course_del/:course',this.stuCourseDel);
 		
 		//问答相关
 		app.get('/student/:id/my_question', this.myQuestion);
@@ -44,6 +47,13 @@ module.exports = {
 	},
 
 	register: function(req, res, next) {
+		if(req.session.role){
+			req.session.flash = {
+				type:'danger', intro:'',
+				message:'你已登录！返回首页',
+			}
+			return res.redirect(303, '/');
+		}
 		res.render('student/register');
 	},
 
@@ -95,6 +105,13 @@ module.exports = {
 	},
 
 	login: function(req, res, next) {
+		if(req.session.role){
+			req.session.flash = {
+				type:'danger', intro:'',
+				message:'你已登录！返回首页',
+			}
+			return res.redirect(303, '/');
+		}
 		res.locals.login = {
 			url:"/student/login",
 			role : "用户"
@@ -137,7 +154,25 @@ module.exports = {
 			res.render('student/my_course', studentViewModel.getMyCourses(student));
 		});
 	},
-
+	stuCourseDel:function(req, res, next){
+		checkStudentAccount(req, res);
+		Student.findById(req.params.id, function(err, student) {
+			if(err) return next(err);
+			if(!student) return next(); 	// pass this on to 404 handler
+			var courses = student.courses;
+			for(var i=0,length=courses.length;i<length;i++){
+				if(courses[i].course_name==req.params.course){
+					courses.splice(i,1);
+				}
+			}
+			student.save();
+			req.session.flash = {
+				type:'success', intro:'',
+				message:'退选 '+req.params.course+' 成功！',
+			}
+			res.render('student/my_course', studentViewModel.getMyCourses(student));
+		});
+	},
 	myNote: function(req, res, next) {
 		checkStudentAccount(req, res);
 		Student.findById(req.params.id, function(err, student) {

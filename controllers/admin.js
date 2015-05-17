@@ -60,6 +60,13 @@ module.exports = {
 	},
 
 	login: function(req, res, next) {
+		if(req.session.role){
+			req.session.flash = {
+				type:'danger', intro:'',
+				message:'你已登录！返回首页',
+			}
+			return res.redirect(303, '/');
+		}
 		res.locals.login = {
 			url:"/admin/login",
 			role : "管理员"

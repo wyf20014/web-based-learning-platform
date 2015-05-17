@@ -11,17 +11,17 @@
 			       		<h4>{{course}}</h4>
 			        	</a>
 			        <p>已学到:&nbsp;{{video}}</p>
-			        <p><a href="/course/{{course}}/preferences" class="btn btn-primary" role="button">继续学习</a> <a href="/student/{{account.id}}/course_del" class="btn btn-danger" role="button">退选此课程</a></p>
+			        <p><a href="/course/{{course}}/preferences" class="btn btn-primary" role="button">继续学习</a> <a href="/student/{{../account.id}}/course_del/{{course}}" class="btn btn-danger" role="button">退选此课程</a></p>
 			      </div>
 			    </div>
 			  </div>
 		 {{/each}}
 		 {{else}}
-		 <div class="col-sm-4">
-			<h4>你还没参加课程，快去学习吧！</h4>
+		 <div class="col-sm-5">
+			<h4>你还没正在学习的课程，快去看看吧！</h4>
 		</div>
 		<div class="col-sm-1">
-			 <button class="btn btn-info" onclick="window.location='/course/list'">参加课程</button>
+			 <button class="btn btn-info" onclick="window.location='/course/list'">学习课程</button>
 		</div>
 		 {{/if}}
 	</div>
