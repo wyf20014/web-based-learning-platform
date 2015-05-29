@@ -3,6 +3,7 @@ var Note = require('../models/note.js');
 var Question = require('../models/question.js');
 var Answer = require('../models/answer.js');
 var studentViewModel = require('../viewModels/student.js');
+var _ = require('underscore');
 
 function checkStudentAccount(req, res){
 	if(!(req.session.role == 'student' && req.session.account.id == req.params.id))
@@ -80,6 +81,7 @@ module.exports = {
 					account: req.body.account,
 					name: req.body.name,
 					password: req.body.password1,
+					grade:req.body.grade,
 				});
 				c.save(function(err) {
 					if(err) {
@@ -93,11 +95,14 @@ module.exports = {
 					}
 					if(req.xhr) return res.json({ success: true });
 					req.session.role='student';
-					req.session.account = {'id':c._id,'name':c.account} ;
 					req.session.flash = {
 						type:'success', intro:'注册成功！',
 						message:'欢迎来到个人主页',
 					}
+					req.session.account = {
+						'id':c._id,
+						'name':c.account,
+					} ;
 					res.redirect(303, '/student/' + c._id+'/my_home');
 				});
 			});
@@ -131,7 +136,11 @@ module.exports = {
 			}
 			else{
 				req.session.role='student';
-				req.session.account = {'id':student._id,'name':student.account} ;
+				req.session.account = {
+					'id':student._id,
+					'name':student.account,
+				} ;
+				
 				req.session.flash = {
 					type:'success', intro:'',
 					message:'登录成功！欢迎来到个人主页',
@@ -143,7 +152,19 @@ module.exports = {
 
 	myHome: function(req, res, next) {
 		checkStudentAccount(req, res);
-		res.render('student/my_home');
+		Student.findById(req.params.id,function(err,student){
+			if(err) return next(err);
+			if(!student) return next(); 
+			var  stu_courses_length= student.courses.length;
+			var studentinfo = {
+				answer_number : student.answer_number,
+				question_number : student.question_number,
+				course_number : stu_courses_length,
+				note_number : student.note_number,
+			};
+			var vm = _.extend(studentinfo,studentViewModel.getRecommendCourses(student))
+			res.render('student/my_home',vm);
+		});
 	},
 
 	myCourse: function(req, res, next) {
@@ -151,7 +172,10 @@ module.exports = {
 		Student.findById(req.params.id, function(err, student) {
 			if(err) return next(err);
 			if(!student) return next(); 	// pass this on to 404 handler
-			res.render('student/my_course', studentViewModel.getMyCourses(student));
+			var recommend = studentViewModel.getRecommendCourses(student);
+			var mycourses = studentViewModel.getMyCourses(student);
+			var vm = _.extend(recommend, mycourses);
+			res.render('student/my_course', vm);
 		});
 	},
 	stuCourseDel:function(req, res, next){
@@ -225,6 +249,13 @@ module.exports = {
 						message:'日记添加成功！',
 					}
 					delete req.session.noteform;
+
+					Student.findOne({account:req.session.account.name},function(err,student){
+						if(student){
+							student.note_number +=1;
+							student.save();
+						}
+					});
 					res.redirect(303, '/student/' + req.session.account.id +'/my_note');
 				});
 				
@@ -270,6 +301,12 @@ module.exports = {
 			};
 			return res.redirect(303, '/student/'+req.session.account.id+'/my_note');
 		    } else {
+		    	Student.findById(req.session.account.id,function(err,student){
+		    		if(student){
+		    			student.note_number -= 1;
+		    			student.save();
+		    		}
+		    	});
 		       	req.session.flash = {
 				type:'success', intro:'',
 				message:req.params.title+'日记删除成功！',
@@ -328,6 +365,11 @@ module.exports = {
 						};
 						return res.redirect(303, '/student/'+req.session.account.id+'/write_question');
 					}
+					Student.findById(req.session.account.id,function(err,student){
+						student.question_number += 1;
+						student.save();
+					});
+
 					if(req.xhr) return res.json({ success: true });
 					req.session.flash = {
 						type:'success', intro:'',
@@ -363,6 +405,10 @@ module.exports = {
 				type:'success', intro:'',
 				message:'回答提交成功！',
 			}
+			Student.findById(req.session.account.id,function(err,student){
+				student.question_number+=1;
+				student.save();
+			});
 			delete req.session.answerform;
 			res.redirect(303, '/question/'+req.session.question.id+'/preferences');
 		});
@@ -374,7 +420,7 @@ module.exports = {
 		Student.findOne({account:req.session.account.name},function(err, student){
 			if(err) return next(err);
 			if(!student) return next(); 
-			res.render('student/my_account',studentViewModel.getMyAccount(student));
+			res.render('student/my_account',studentViewModel.getStudentAccount(student));
 		})
 	},
 

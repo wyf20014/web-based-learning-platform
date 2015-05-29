@@ -1,6 +1,6 @@
 var http = require('http'),
     express = require('express'),
-    Video = require('./models/video.js'),
+    Admin = require('./models/admin.js'),
     formidable = require('formidable');
 
 var app = express();
@@ -38,6 +38,15 @@ var options = {
 };
         mongoose.connect("localhost:27017/test", options);
 
+Admin.find(function(err, admins){
+    if(admins.length) return;
+
+    new Admin({
+        name: 'admin',
+        password:'admin'
+    }).save();
+
+});
 //根据用户session中role的值决定header显示的内容
 app.use(function(req, res, next){
     switch(req.session.role){

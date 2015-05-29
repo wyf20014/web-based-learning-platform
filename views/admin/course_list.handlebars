@@ -3,12 +3,11 @@
 	<div class="row">
 		<div class="col-sm-9">
 	                <button class="btn btn-info" onclick="window.location='/admin/{{account.id}}/course_upload'">上传课程</button>
+	                <button class="btn btn-primary" onclick="window.location='/admin/{{account.id}}/course_table'">课程统计</button>
 	            </div>
 	</div>
 	<div class="row">
-		<div class="col-sm-9">
-	                <br>
-	            </div>
+		<br/>
 	</div>
 	<div class="row">
 		{{#if courses}}
@@ -32,9 +31,6 @@
 		 {{else}}
 		 <div class="col-sm-4">
 			<h4>暂时没有课程！</h4>
-		</div>
-		<div class="col-sm-1">
-			 <button class="btn btn-info" onclick="window.location='/admin/{{account.id}}/upload_course'">上传课程</button>
 		</div>
 		 {{/if}}
 	</div>

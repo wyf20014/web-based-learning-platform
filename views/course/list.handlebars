@@ -1,19 +1,21 @@
 {{>course_nav}}
-<div class="col-sm-9 ">
+<div class="col-md-9">
 	<div style='margin-bottom:5px'>
 		<ul class="nav nav-tabs">
-		  <li role="presentation" class="active"><a href="#">最新</a></li>
-		  <li role="presentation"><a href="#">最热</a></li>
+		  <li role="presentation" class="active"><a class='sort' href="/course/list?type=newest">最新</a></li>
+		  <li role="presentation"><a class='sort' href="/course/list?type=hotest">最热</a></li>
 		</ul>
 	</div>
 
 	<div class="row">
 		{{#each courses}}
-			  <div class="col-xs-8 col-md-4">
+			  <div class="col-md-4">
 				  <p class="text-center">
 				    <a href="/course/{{name}}/preferences" class="thumbnail">
 				      <img src="{{img}}" alt="{{name}}">
-				      {{name}}
+				      <span style='font-size:16px'>{{name}}</span>
+				      <br>
+				        <span style='color:black'>学习人数：{{learning}}</span>
 				    </a>
 				  </p>
 			  </div>
@@ -21,12 +23,24 @@
 	</div>
 </div>
 <input type='hidden' id='tag_id' value='{{tag}}'>
+<input type='hidden' id='type_id' value='{{type}}'>
 {{#section 'jquery'}}
 	<script>
 		$('document').ready(function(){
 			$('#header_nav li').eq(1).addClass('active');
-			var tag =  '#'+$('#tag_id').val();
-			$(tag).addClass('active');
+			var tag =  $('#tag_id').val();
+			$('#'+tag).addClass('active');
+			var type = $('#type_id').val();
+			console.log(type);
+			if(type=='hotest'){
+				$('a.sort').eq(0).parent().removeClass('active');
+				$('a.sort').eq(1).parent().addClass('active');
+				
+			}
+			$('a.sort').each(function(){
+				var href = $(this).attr('href');
+				$(this).attr('href',href+'&&tag='+tag);
+			});
 		});
 	</script>
 {{/section}}

@@ -4,11 +4,11 @@ var _ = require('underscore');
 
 module.exports = {
 
-	getCourseList : function(courses, tag){
+	getCourseList : function(courses, tag, type){
 		var vm = _.map(courses,function(course){
-			return _.pick(course,'name','img','info','_id');
+			return _.pick(course,'name','img','info','_id','learning');
 		});
-		return {courses:vm,tag:tag};
+		return {courses:vm, tag:tag, type:type};
 	},
 	getCoursePreferences : function(course,videos){
 		var length = parseInt(videos.length)+1;

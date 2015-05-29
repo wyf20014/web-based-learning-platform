@@ -32,7 +32,8 @@
   </div>
   </div>
 </div>
-{{#if role}}
+{{#if role.student}}
+{{#if answerRight}}
 <h3>&nbsp;&nbsp;我来回答</h3><br>
   <div class="formContainer">
       <form class="form-horizontal newsletterForm" role="form" action="/student/{{account.id}}/write_answer" method="POST">
@@ -50,6 +51,7 @@
           </div>
       </form>
   </div>
+  {{/if}}
   {{/if}}
 </div>
 

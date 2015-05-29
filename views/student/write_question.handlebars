@@ -12,13 +12,20 @@
 	        <div class="form-group">
 	            <label for="fieldTag" class="col-sm-2 control-label">问题标签</label>
 	            <div class="col-sm-6">
-	                <input type="text" class="form-control" required name="tag" value='{{questionform.tag}}'>
+	            <select class="form-control" required name="tag" value='{{questionform.tag}}'>
+		  <option value="Java">Java</option>
+		  <option value="Android">Android</option>
+		  <option value="IOS">IOS</option>
+		  <option value="PHP">PHP</option>
+		  <option value="Node.js">Node.js</option>
+		</select>
+		<input  id='tag' type='hidden' value='{{questionform.tag}}'>
 	            </div>
 	        </div>
 	        <div class="form-group">
 	            <label for="fieldContent" class="col-sm-2 control-label">问题内容</label>
 	            <div class="col-sm-9">
-	                <textarea name="content" class='form-control' rows="15">{{questionform.content}}</textarea>
+	                <textarea name="content" class='form-control' rows="15" required>{{questionform.content}}</textarea>
 	            </div>
 	        </div>
 	        <div class="form-group">
@@ -33,6 +40,8 @@
 	<script>
 		$('document').ready(function(){
 			$('#header_nav li').eq(3.addClass('active');
+			var tag = $("#tag").val();
+			$('option[value='+tag+']').eq(0).prop('selected',true);
 		});
 	</script>
 {{/section}}

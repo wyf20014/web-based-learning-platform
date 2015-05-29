@@ -27,7 +27,7 @@ module.exports = {
 			question.getAnswers(function(err, answers) {
 				if(err) return next(err);
 				req.session.question = {'name':question.name,'id':question._id};
-				res.render('question/preferences', questionViewModel.getQuestionPreferences(question, answers));
+				res.render('question/preferences', questionViewModel.getQuestionPreferences(question, answers, req));
 			});
 		});
 	},

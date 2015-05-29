@@ -34,6 +34,7 @@ module.exports = {
 		app.get('/admin/:id/admin_home', this.home);
 
 		app.get('/admin/:id/course_list', this.courseList);
+		app.get('/admin/:id/course_table', this.courseTable);
 
 		app.get('/admin/:id/course_upload', this.courseUpload);
 		app.post('/admin/:id/course_upload', this.processCourseUpload);
@@ -109,6 +110,14 @@ module.exports = {
 		});
 	},
 
+	courseTable: function(req, res, next) {
+		checkAdminAccount(req, res);
+		Course.find(function(err, courses) {
+			if(err) return next(err);
+			res.render('admin/course_table', {courses:courses});
+		});
+	},
+
 	courseUpload: function(req, res, next){
 		checkAdminAccount(req, res);
 		res.render('admin/course_upload');
@@ -152,6 +161,7 @@ module.exports = {
 				 var c = new Course({
 					name: fields.name,
 					tag: fields.tag,
+					grade:fields.grade,
 					info:fields.info,
 					img:pathsave,
 				});
@@ -213,10 +223,10 @@ module.exports = {
 				 readStream.on('end',function(){
 				     	 fs.unlinkSync(photo.path);
 				 });
-				 var update = {$set : { info : fields.info, tag : fields.tag, img:pathsave,}};
+				 var update = {$set : { info : fields.info, tag : fields.tag, img:pathsave, grade:fields.grade}};
 			 }
 			else{
-				 var update     = {$set : { info : fields.info, tag : fields.tag }};
+				 var update     = {$set : { info : fields.info, tag : fields.tag ,grade:fields.grade}};
 			}
 		        var conditions = {name: req.params.name};
 		        var options    = {upsert : true};

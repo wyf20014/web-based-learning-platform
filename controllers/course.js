@@ -8,16 +8,28 @@ module.exports = {
 	},
 
 	list: function(req, res, next) {
-		if(!req.query.tag) var tag={};
+		if(!req.query.tag||req.query.tag=='all') var tag={};
 		else{
 			var tag = {tag: req.query.tag};
 		}
-		Course.find(tag,function(err, courses) {
-			if(err) return next(err);
-			if(!courses) return next(); 
-			var tag_id = req.query.tag||'all';
-			res.render('course/list', courseViewModel.getCourseList(courses,tag_id));
-		});
+		if(req.query.type!='hotest'){
+			Course.find(tag,function(err, courses) {
+				if(err) return next(err);
+				if(!courses) return next(); 
+				var tag_id = req.query.tag||'all';
+				var type_id = 'newest';
+				res.render('course/list', courseViewModel.getCourseList(courses, tag_id, type_id));
+			}).sort({"time":-1}) ;
+		}
+		else{
+			Course.find(tag,function(err, courses){
+				if(err) return next(err);
+				if(!courses) return next(); 
+				var tag_id = req.query.tag||'all';
+				var type_id = 'hotest';
+				res.render('course/list', courseViewModel.getCourseList(courses,tag_id, type_id));
+			}).sort({'learning':-1});
+		}
 	},
 
 	preferences: function(req, res, next) {

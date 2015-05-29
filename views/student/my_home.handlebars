@@ -1,5 +1,52 @@
 {{>student_nav}}
-<div class="col-sm-9"><h2>Welcome to Home , {{account.name}}</h2></div>
+<div class="col-md-9">
+	<div class="row">
+		<h4 style="color:#428bca">学习情况</h4>
+		<div class="col-md-8">
+			<ol style='font-size:18px'>
+				<li>你写了&nbsp;<strong style='color:red'>{{note_number}}</strong>&nbsp;篇日记</li>
+				<li>提出了&nbsp;<strong style='color:red'>{{question_number}}</strong>&nbsp;个问题</li>
+				<li>回答了&nbsp;<strong style='color:red'>{{answer_number}}</strong>&nbsp;个问题</li>
+				<li>正在参加&nbsp;<strong style='color:red'>{{course_number}}</strong>&nbsp;个课程</li>
+			</ol>
+		</div>
+	</div>
+	{{#if interest_courses}}
+		<div class="row" style='border-top:1px solid grey'>
+		<h4 style="color:#428bca">你可能感兴趣的课程</h4>
+		{{#each interest_courses}}
+			  <div class="col-md-4">
+				  <p class="text-center">
+				    <a href="/course/{{name}}/preferences" class="thumbnail">
+				      <img src="{{img}}" alt="{{name}}">
+				      <span style='font-size:16px'>{{name}}</span>
+				      <br>
+				        <span style='color:black'>学习人数：{{learning}}</span>
+				    </a>
+				  </p>
+			  </div>
+		  {{/each}}
+	</div>
+	{{/if}}
+	{{#if fit_courses}}
+		<div class="row" style='border-top:1px solid grey'>
+		  <h4 style="color:#428bca">适合你的课程</h4>
+		{{#each fit_courses}}
+			  <div class="col-md-4">
+
+				  <p class="text-center">
+				    <a href="/course/{{name}}/preferences" class="thumbnail">
+				      <img src="{{img}}" alt="{{name}}">
+				      <span style='font-size:16px'>{{name}}</span>
+				      <br>
+				        <span style='color:black'>学习人数：{{learning}}</span>
+				    </a>
+				  </p>
+			  </div>
+		  {{/each}}
+	</div>
+	{{/if}}
+</div>
 {{#section 'jquery'}}
 	<script>
 		$('document').ready(function(){

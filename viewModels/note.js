@@ -8,6 +8,7 @@ module.exports = {
 		var vm = _.map(notes,function(note){
 			return _.omit(note,'_id');
 		});
-		return {notes:vm,tag:tag};
+		var length = notes.length;
+		return {notes:vm,tag:tag,noteLength:length};
 	},
 };

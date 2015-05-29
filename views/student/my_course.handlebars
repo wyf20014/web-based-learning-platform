@@ -1,7 +1,13 @@
 {{>student_nav}}
 <div class="col-sm-9">
 	<div class="row">
+		<div class="col-sm-8">
+	                <h4 style="color:#428bca">我的课程<span>({{courseLength}})</span></h4>
+	            </div>
+	</div>
+	
 		{{#if courses_list}}
+		<div class="row">
 		{{#each courses_list}}
 			  <div class="col-sm-6 col-md-4">
 			    <div class="thumbnail">
@@ -16,15 +22,50 @@
 			    </div>
 			  </div>
 		 {{/each}}
+		 </div>
 		 {{else}}
-		 <div class="col-sm-5">
-			<h4>你还没正在学习的课程，快去看看吧！</h4>
-		</div>
-		<div class="col-sm-1">
-			 <button class="btn btn-info" onclick="window.location='/course/list'">学习课程</button>
+		 <div class='row'>
+			<div class="col-sm-8">
+				<h4 class=''>你还没正在学习的课程，快去看看吧！</h4> 
+				 <button class="btn btn-info" onclick="window.location='/course/list">学习课程</button>
+			</div>
 		</div>
 		 {{/if}}
-	</div>
+		{{#if interest_courses}}
+			<div class="row" style='border-top:1px solid grey'>
+			<h4 style="color:#428bca">你可能感兴趣的课程</h4>
+			{{#each interest_courses}}
+				  <div class="col-md-4">
+					  <p class="text-center">
+					    <a href="/course/{{name}}/preferences" class="thumbnail">
+					      <img src="{{img}}" alt="{{name}}">
+					      <span style='font-size:16px'>{{name}}</span>
+					      <br>
+					        <span style='color:black'>学习人数：{{learning}}</span>
+					    </a>
+					  </p>
+				  </div>
+			  {{/each}}
+		</div>
+		{{/if}}
+		{{#if fit_courses}}
+			<div class="row" style='border-top:1px solid grey'>
+			  <h4 style="color:#428bca">适合你的课程</h4>
+			{{#each fit_courses}}
+				  <div class="col-md-4">
+
+					  <p class="text-center">
+					    <a href="/course/{{name}}/preferences" class="thumbnail">
+					      <img src="{{img}}" alt="{{name}}">
+					      <span style='font-size:16px'>{{name}}</span>
+					      <br>
+					        <span style='color:black'>学习人数：{{learning}}</span>
+					    </a>
+					  </p>
+				  </div>
+			  {{/each}}
+		</div>
+		{{/if}}
 </div>
 {{#section 'jquery'}}
 	<script>

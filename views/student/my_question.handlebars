@@ -1,42 +1,41 @@
 {{>student_nav}}
 
 <div class="col-sm-9">
-{{#if questions}}
 	<div class="row">
 		<div class="col-sm-9">
 	                <button class="btn btn-info" onclick="window.location='/question/list'">问答社区</button>
 	            </div>
 	</div>
 	<div class="row">
-		<div class="col-sm-9">
-	                <h4>我的问题</h4>
+		<div class="col-sm-12 text-center">
+	                <h3>我的问题<span>({{questionLength}})</span></h3>
 	            </div>
 	</div>
-	
+{{#if questions}}
 	{{#each questions}}
-	
 		  <div class="col-sm-12">
 		    <div class="thumbnail">
 		      <div class="caption">
-		        <h3>{{name}}</h3>
+		        <h4 style="color:blue">{{name}}</h4>
 		        <p>{{content}}</p>
 		        <p><a href="/question/{{id}}/preferences" class="btn btn-primary" role="button">查看回答</a></p>
 		      </div>
 		    </div>
 		  </div>
-		
 	{{/each}}
-	
 {{else}}
 <div class='row'>
-	<div class="col-sm-6">
+	<div class="col-sm-12 text-center">
 		<h4>你还没有提出问题，快去问答社区看看！</h4>
+		<button class="btn btn-info" onclick="window.location='/question/list/all'">问答社区</button>
 	</div>
-	<div class="col-sm-1">
-                <button class="btn btn-info" onclick="window.location='/question/list'">问答社区</button>
-            </div>
 </div>
 {{/if}}
+<div class="row">
+		<div class="col-sm-12 text-center">
+	                <h3>我的回答<span>({{answerLength}})</span></h3>
+	            </div>
+	</div>
 {{#if answers}}
 	<div class="row">
 		<div class="col-sm-9">
@@ -45,7 +44,6 @@
 	</div>
 	
 	{{#each answers}}
-	
 		  <div class="col-sm-12">
 		    <div class="thumbnail">
 		      <div class="caption">
@@ -54,17 +52,13 @@
 		      </div>
 		    </div>
 		  </div>
-		
 	{{/each}}
-	
 {{else}}
 <div class='row'>
-	<div class="col-sm-6">
-		<h4>你未曾回答他人问题，快去问答社区瞧瞧！</h4>
+	<div class="col-sm-12 text-center">
+		<h4 class=''>你未曾回答他人问题，快去问答社区瞧瞧！</h4> 
+		 <button class="btn btn-info" onclick="window.location='/question/list/unsolved">回答问题</button>
 	</div>
-	<div class="col-sm-1">
-                <button class="btn btn-info" onclick="window.location='/question/list?state=unsolved'">回答问题</button>
-            </div>
 </div>
 {{/if}}
 </div>

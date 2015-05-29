@@ -44,14 +44,23 @@
 	{{/each}}
 	
 {{else}}
-<div class='row'>
-	<div class="col-sm-5">
-		<h4>没有日记，我来写一篇吧！</h4>
+	{{#if role.student}}
+	<div class='row'>
+		<div class="col-sm-5">
+			<h4>没有日记，我来写一篇吧！</h4>
+		</div>
+		<div class="col-sm-1">
+	                <button class="btn btn-info" onclick="window.location='/student/{{account.id}}/write_note'">写日记</button>
+	            </div>
 	</div>
-	<div class="col-sm-1">
-                <button class="btn btn-info" onclick="window.location='/student/{{account.id}}/write_note'">写日记</button>
-            </div>
-</div>
+	{{else}}
+	<div class='row'>
+		<div class="col-sm-5">
+			<h4> 暂时没有日记！</h4>
+		</div>
+	</div>
+	{{/if}}
+
 {{/if}}
 <input type='hidden' id='tag' value='{{tag}}'>
 </div>

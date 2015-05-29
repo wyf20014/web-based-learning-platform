@@ -1,6 +1,6 @@
 {
-  "name": "IT Learn",
-  "version": "0.0.0",
+  "name": "IT",
+  "version": "1.0.0",
   "description": "Web-Based-Learning-Platform",
   "main": "app.js",
   "scripts": {
@@ -25,7 +25,8 @@
     "express3-handlebars": "~0.5.0",
     "formidable": "^1.0.17",
     "session-mongoose": "^0.5.2",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "mongoose": "~4.0.3"
   },
   "devDependencies": {
     "chai": "^2.2.0",
