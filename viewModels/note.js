@@ -6,7 +6,7 @@ module.exports = {
 
 	getNoteList : function(notes, tag){
 		var vm = _.map(notes,function(note){
-			return _.omit(note,'_id');
+			return _.omit(note,'_v');
 		});
 		var length = notes.length;
 		return {notes:vm,tag:tag,noteLength:length};

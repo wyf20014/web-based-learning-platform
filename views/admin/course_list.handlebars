@@ -3,7 +3,8 @@
 	<div class="row">
 		<div class="col-sm-9">
 	                <button class="btn btn-info" onclick="window.location='/admin/{{account.id}}/course_upload'">上传课程</button>
-	                <button class="btn btn-primary" onclick="window.location='/admin/{{account.id}}/course_table'">课程统计</button>
+	                <button class="btn btn-primary" onclick="window.location='/admin/{{account.id}}/course_table'">表格</button>
+	                 <button class="btn btn-primary" onclick="window.location='/admin/{{account.id}}/course_chart'">图示</button>
 	            </div>
 	</div>
 	<div class="row">
@@ -22,7 +23,7 @@
 			        <p style='color:#428bca'>课程简介:{{info}}</p>
 			        <p>
 			        <a  href='/admin/{{../account.id}}/course_update/{{name}}' class="btn btn-primary" role="button" >修改</a>
-			         <a  class="btn btn-danger" role="button" onclick="checkDelCourse('{{../account.id}}','{{name}}')">删除</a>
+			         <a  class="btn btn-danger" role="button" onclick="checkDelCourse('{{../account.id}}','{{name}}','list')">删除</a>
 			         <a  href='/admin/{{../account.id}}/course_video/{{_id}}' class="btn btn-primary" role="button" >章节</a> </p>
 			      </div>
 			    </div>
@@ -42,10 +43,5 @@
 			$('#admin_nav li').eq(2).addClass('active');
 		});
 
-		function checkDelCourse(account, name){
-			if(confirm('是否要删除'+name+'?')==true){
-				window.location='/admin/'+account+'/course_del/'+name;
-			}
-		}
 	</script>
 {{/section}}

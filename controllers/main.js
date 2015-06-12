@@ -1,3 +1,6 @@
+var Note = require('../models/note.js'),
+	Course = require('../models/course.js');
+
 module.exports = {
 	registerRoutes: function(app) {
 		app.get('/', this.home);

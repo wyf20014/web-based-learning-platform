@@ -1,0 +1,51 @@
+{{>student_nav}}
+
+<div class="col-sm-9">
+	<div class="row">
+		<div class="col-sm-9">
+	                <button class="btn btn-info" onclick="window.location='/question/list'">问答社区</button>
+	                <button class="btn btn-info" onclick="window.location='/student/{{account.id}}/my_question'">我的提问</button>
+	            </div>
+	</div>
+<div class="row">
+		<div class="col-sm-12 text-center">
+	                <h3>我的回答<span>({{answerLength}})</span></h3>
+	            </div>
+	</div>
+{{#if answers}}	
+	{{#each answers}}
+		  <div class="col-sm-12">
+		    <div class="thumbnail">
+		      <div class="caption">
+			<div class='row'>
+			<div class="col-sm-10 col-sm-offset-1">
+				 <h4 style='color:black'><span style='font-size:14px;color:blue'>问题标题:</span><a href='/question/{{question_id}}/preferences'>&nbsp;&nbsp;{{question_name}}</a></h4>
+			        <p style='color:black'><span style='font-size:14px;color:blue'>回答时间:</span>&nbsp;&nbsp;{{time}}</p>
+			        <p style='color:black'><span style='font-size:14px;color:blue'>回答内容:</span></p>
+			        <p style='margin-left:30px'>{{content}}</p>
+			</div>
+			   
+			</div>
+		    
+
+		      </div>
+		    </div>
+		  </div>
+	{{/each}}
+{{else}}
+<div class='row'>
+	<div class="col-sm-12 text-center">
+		<h4 class=''>你未曾回答他人问题，快去问答社区瞧瞧！</h4> 
+	</div>
+</div>
+{{/if}}
+</div>
+
+{{#section 'jquery'}}
+	<script>
+		$('document').ready(function(){
+			$('#header_nav li').eq(4).addClass('active');
+			$('#student_nav li').eq(3).addClass('active');
+		});
+	</script>
+{{/section}}

@@ -8,7 +8,10 @@ var courseSchema = mongoose.Schema({
     img:{type: String, default:""},
     grade:{type: String, default:""},
     learning:{type: Number, default:0},
+    book:{type:String,default:""},
+    code:{type:String,default:""},
     time: {type : Date, default: Date.now},
+    practice:{type: String , default:''},
 });
 
 courseSchema.methods.getVideos = function(cb){

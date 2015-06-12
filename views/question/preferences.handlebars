@@ -19,11 +19,11 @@
     {{#if answers}}
     <h4>所有回答</h4>
     {{#each answers}}
-    <div class="list-group-item">
-      <h4 style='color:#428bca'>回答者:</h4><p>&nbsp;&nbsp;{{stu_account}}&nbsp;&nbsp;</p>
-      <h4 style='color:#428bca'>回答时间:</h4><p>&nbsp;&nbsp;{{time}}</p>
-    <h4 style='color:#428bca'>回答内容:</h4>
-    <p>{{content}}</p>
+    <div class="list-group-item" style='padding-left:100px'>
+      <h5 style='color:#428bca'>回答者:<span style='font-size:14px;color:black'>&nbsp;&nbsp;{{stu_account}}&nbsp;&nbsp;</span></h5>
+      <h5 style='color:#428bca'>回答时间:<span style='font-size:14px;color:black'>&nbsp;&nbsp;{{time}}</span></h5>
+    <h5 style='color:#428bca'>回答内容:</h4>
+    <p style='margin-left:30px'>{{content}}</p>
     </div>
     {{/each}}
     {{else}}

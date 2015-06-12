@@ -6,19 +6,27 @@
                        <h2>{{name}}</h2>
                 </div>
                 <div class="panel-body">
-                  <div class="col-sm-1"></div>
-                  <div class="col-sm-7">
+                  <div class="col-sm-offset-1 col-sm-7">
                       <h4 style='color:#428bca'>课程简介</h4>
                           <p style='font-size:16px'>&nbsp;&nbsp;&nbsp;&nbsp;{{info}}</p>
                   </div>
-                </div>
+                  {{#if book}}
+                   <div class="col-sm-offset-1 col-sm-7">
+                      <h4 style='color:#428bca'>课程教材</h4>
+                          <p style='font-size:16px'>&nbsp;&nbsp;&nbsp;&nbsp;{{book}}</p>
+                  </div>
+                  {{/if}}
+                  {{#if code}}
+                   <div class="col-sm-offset-1 col-sm-7">
+                      <h4 style='color:#428bca'>源码地址</h4>
+                          <p style='font-size:16px'>&nbsp;&nbsp;&nbsp;&nbsp;<a href='{{code}}'>{{code}}</a></p>
+                  </div>
+                   {{/if}}
+               
                             <!-- List group -->
-                <div class="panel-body">
-                    <div class="col-sm-1"></div>
-                    <div class="col-sm-9">
+                    <div class="col-sm-offset-1 col-sm-9">
                     <h4 style='color:#428bca'>课程章节</h4>
-                    <div class="col-sm-1"></div>
-                    <div class="col-sm-11">
+                    <div class="col-sm-offset-1 col-sm-11">
                        <div class="list-group" style='font-size:16px'>
                                   {{#if videos}}
                                       {{#each videos}}
@@ -31,8 +39,13 @@
                                       {{/if}}
                              </div>
                     </div>
-                     
-                    </div>  
+                      </div>
+                       {{#if practice}}
+                     <div class="col-sm-offset-1 col-sm-7">
+                        <h4 style='color:#428bca'>课后练习</h4>
+                            <textarea disabled rows='6' style='width:500px;margin-left:50px'>{{practice}}</textarea>
+                    </div>
+                   {{/if}}
                   </div>
       </div>
 </div>

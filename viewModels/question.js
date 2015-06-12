@@ -18,15 +18,15 @@ module.exports = {
 		if(vm.stu_account == req.session.account.name){
 			flag = false;
 		}
-		return  _.extend(vm, {
+		return  _.extend(vm,{
+				answerRight : flag,
+			}, {
 			answers: answers.map(function(answer){
 				return {
 					content: answer.content,
 					stu_account: answer.stu_account,
-					time: answer.time,
+					time: answer.time.toString().slice(0,-14),
 				};
-			},{
-				answerRight : flag,
 			}),
 		});
 	},

@@ -13,13 +13,23 @@
 	            <label for="fieldTag" class="col-sm-2 control-label">日记标签</label>
 	            <div class="col-sm-6">
 	                 <select class="form-control" required name="tag">
-		  <option value="Java">Java</option>
-		  <option value="Android">Android</option>
-		  <option value="IOS">IOS</option>
-		  <option value="PHP">PHP</option>
-		  <option value="Node.js">Node.js</option>
+			  <option class='tag' value="Java">Java</option>
+			  <option class='tag' value="Android">Android</option>
+			  <option class='tag' value="IOS">IOS</option>
+			  <option class='tag' value="PHP">PHP</option>
+			  <option class='tag' value="Node">Node.js</option>
 		</select>
 		<input  id='tag' type='hidden' value='{{tag}}'>
+	            </div>
+	        </div>
+	            <div class="form-group">
+	            <label for="fieldRead_right" class="col-sm-2 control-label">阅读权限</label>
+	            <div class="col-sm-6">
+	                <select class="form-control" required name="read_right">
+		  <option class='read_right' value="0">仅自己可见</option>
+		  <option class='read_right' value="1">所有人可见</option>
+		</select>
+		<input  id='read_right' type='hidden' value='{{read_right}}'>
 	            </div>
 	        </div>
 	        <div class="form-group">
@@ -42,7 +52,9 @@
 			$('#header_nav li').eq(4).addClass('active');
 			$('#student_nav li').eq(2).addClass('active');
 			var tag = $("#tag").val();
-			$('option[value='+tag+']').eq(0).prop('selected',true);
+			$('option.tag[value='+tag+']').eq(0).prop('selected',true);
+			var read_right = $("#read_right").val();
+			$('option.read_right[value='+read_right+']').eq(0).prop('selected',true); 
 		});
 	</script>
 {{/section}}

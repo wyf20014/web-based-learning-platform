@@ -1,5 +1,15 @@
 {{>admin_nav}}
-<div class="col-sm-9"><h2>Welcome to Home , {{account.name}}</h2></div>
+<div class="col-sm-9">
+	<h2>欢迎使用管理员功能 , {{account.name}}</h2>
+	<br/>
+	<ol style='font-size:18px;color:blue'>
+		<li>课程管理功能模块，主要完成课程上传、课程删除、课程修改、课程章节设置等功能</li>
+		<br/>
+		<li>学生管理功能模块，主要完成学生信息修改、学生日记删除、学生问答删除等功能</li>
+		<br/>
+		<li>建议采纳功能模块，主要完成回复建议、奖励学生的功能</li>
+	</ol>
+</div>
 {{#section 'jquery'}}
 	<script>
 		$('document').ready(function(){

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-inverse navbar-default">
+<nav class="navbar navbar-inverse navbar-default navbar-fixed-top">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -28,6 +28,7 @@
                   <li><a href='/admin/{{account.id}}/course_list'>课程管理</a></li>
                   <li><a href='/admin/{{account.id}}/note_list'>日记管理</a></li>
                   <li><a href='/admin/{{account.id}}/question_list'>问答管理</a></li>
+                  <li><a href='/admin/{{account.id}}/suggestion_list'>建议采纳</a></li>
                 </ul>
               </li>
           {{/if}}
@@ -40,17 +41,13 @@
                   <li><a href='/student/{{account.id}}/my_note'>我的日记</a></li>
                   <li><a href='/student/{{account.id}}/my_question'>我的问答</a></li>
                   <li><a href='/student/{{account.id}}/my_account'>我的账户</a></li>
+                  <li><a href='/student/{{account.id}}/my_suggestion'>我的建议</a></li>
+                   <li><a href='/student/{{account.id}}/note_collect'>日记收藏</a></li>
                 </ul>
               </li>
           {{/if}}
         {{/if}}
       </ul>
-      <form class="navbar-form navbar-left" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="搜索课程、问答">
-        </div>
-        <button type="submit" class="btn btn-default">搜索</button>
-      </form>
       {{#if role}}
       <button type="button" class="btn btn-default navbar-btn navbar-right" onclick="window.location='/quit'">退出</button>
       <p class="navbar-text navbar-right">欢迎你，<a href="/student/{{account.id}}/my_home" class="navbar-link">{{account.name}}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>

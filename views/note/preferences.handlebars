@@ -1,0 +1,56 @@
+{{> note_nav}}
+<div class="col-sm-9" id='container'>
+	<div class="row">
+		<div class="col-sm-9">
+	                <br>
+	            </div>
+	</div>
+		 <div class="col-sm-12">
+		    <div class="thumbnail">
+		      <div class="caption">
+		      <div class="row">
+		      	<div class="col-sm-12" style="text-align:center">
+				<h3 style='color:#428bca'>{{note.title}}</h3>
+		       	</div>
+		      </div>
+		      <div class="row">
+			      <div class="col-sm-offset-1 col-sm-6">
+					<p><span style='color:#428bca'>作者:</span>&nbsp;&nbsp;{{note.stu_account}}</p>
+					<p><span style='color:#428bca'>编写时间:</span>&nbsp;&nbsp;{{note.time}}</p>
+		     	      </div>
+			      </br>	
+		      </div>
+		       <div class="row note-content">
+			        <div class='col-sm-10 col-sm-offset-1'>
+			        <p style='color:#428bca'>日记内容：</p>
+			       	 <textarea rows='25' style='width:675px' disabled>{{note.content}}</textarea>
+			        </div>
+		       </div>
+		       {{#if notSelf}}
+		         <div class="row note-content">
+			        <div class='col-sm-10 col-sm-offset-1 text-right'>
+			        {{#if collected}}
+			        	                <button  class="btn btn-info btn-danger collect" title="点击取消收藏" onclick="cancelCollectNote('{{account.id}}','{{note.title}}','{{note._id}}')">取消收藏</button>
+			        {{else}}
+			        	                <button class="btn btn-info btn-primary collect" title="收藏此日记" onclick="collectNote('{{account.id}}','{{note.title}}','{{note._id}}')">收藏</button>			        
+			        {{/if}}
+			       </div>
+		     </div>
+		     {{/if}}
+		    </div>
+		  </div>
+		
+<input type='hidden' id='tag' value='{{note.tag}}'>
+</div>
+
+{{#section 'jquery'}}
+	<script>
+		$('document').ready(function(){
+			$('#header_nav li').eq(2).addClass('active');
+			var tag = '#'+$('#tag').val();
+			$(tag).addClass('active');
+		});
+
+		
+	</script>
+{{/section}}

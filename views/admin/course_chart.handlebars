@@ -1,0 +1,73 @@
+{{>admin_nav}}
+<div class="col-sm-9">
+	<div class="row">
+		<div class="col-sm-9">
+	                <button class="btn btn-info" onclick="window.location='/admin/{{account.id}}/course_upload'">上传课程</button>
+	                <button class="btn btn-primary" onclick="window.location='/admin/{{account.id}}/course_list'">缩略图</button>
+	                 <button class="btn btn-primary" onclick="window.location='/admin/{{account.id}}/course_table'">表格</button>
+	                 <input type='hidden' value = '/admin/{{account.id}}/course_chart_data' id='dataUrl'>
+	            </div>
+	</div>
+	<div class="row">
+		<br/>
+	</div>
+	<div class="row">
+		<div id="main" style="height:600px;"></div>
+		  
+	</div>
+	
+</div>
+{{#section 'jquery'}}
+  <script src="/vendor/echarts-all.js"></script>
+	<script>
+		$('document').ready(function(){
+			$('#header_nav li').eq(4).addClass('active');
+			$('#admin_nav li').eq(2).addClass('active');
+			   var dataurl = $('#dataUrl').val();
+			    $.ajax({
+			    	url: dataurl,
+			    	type: 'GET',
+			    })
+			    .done(function(data) {
+			    	 var myChart = echarts.init(document.getElementById('main'));
+			 	      var option = {
+			                	 title : {
+					        text: '按月度和标签统计课程学习情况',
+					    },
+					    tooltip : {
+					        trigger: 'axis'
+					    },
+					    legend: {
+					        data:['Java','Android','IOS','PHP','Node.js']
+					    },
+					    toolbox: {
+					        show : true,
+					        feature : {
+					            mark : {show: true},
+					            dataView : {show: true, readOnly: false},
+					            magicType : {show: true, type: ['line', 'bar']},
+					            restore : {show: true},
+					            saveAsImage : {show: true}
+					        }
+					    },
+					    calculable : true,
+					    xAxis : [
+					        {
+					            type : 'category',
+					            data : ['3月','4月','5月','6月']
+					        }
+					    ],
+					    yAxis : [
+					        {
+					            type : 'value'
+					        }
+					    ],
+					    series : data,
+			                }
+			                myChart.setOption(option);
+			    })
+			    .fail(function() {
+			    })		       
+			});		
+	</script>
+{{/section}}

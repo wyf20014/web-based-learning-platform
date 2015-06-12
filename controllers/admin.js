@@ -5,6 +5,8 @@ var Admin = require('../models/admin.js'),
 	Question = require('../models/question.js'),
 	Answer = require('../models/answer.js'),
 	Video= require('../models/video.js'),
+	Record= require('../models/record.js'),
+	Suggestion = require('../models/suggestion.js'),
 	adminViewModel = require('../viewModels/admin.js'),
 	studentViewModel = require('../viewModels/student.js'),
 	courseViewModel = require('../viewModels/course.js'),
@@ -35,11 +37,13 @@ module.exports = {
 
 		app.get('/admin/:id/course_list', this.courseList);
 		app.get('/admin/:id/course_table', this.courseTable);
+		app.get('/admin/:id/course_chart', this.courseChart);
+		app.get('/admin/:id/course_chart_data',this.courseChartData);
 
 		app.get('/admin/:id/course_upload', this.courseUpload);
 		app.post('/admin/:id/course_upload', this.processCourseUpload);
 
-		app.get('/admin/:id/course_del/:name', this.courseDel);
+		app.get('/admin/:id/course_del/:name/:link', this.courseDel);
 
 		app.get('/admin/:id/course_update/:name',this.courseUpdate);
 		app.post('/admin/:id/course_update/:name',this.processCourseUpdate);
@@ -57,6 +61,10 @@ module.exports = {
 
 		app.get('/admin/:id/note_list', this.noteList);
 		app.get('/admin/:id/note_del/:student/:title', this.noteDel);
+
+		app.get('/admin/:id/suggestion_list', this.suggestionList);
+		app.get('/admin/:id/suggestion_update/:student/:title', this.suggestionUpdate);
+		app.post('/admin/:id/suggestion_update/:student/:title', this.processSuggestionUpdate);
 		
 	},
 
@@ -114,8 +122,415 @@ module.exports = {
 		checkAdminAccount(req, res);
 		Course.find(function(err, courses) {
 			if(err) return next(err);
-			res.render('admin/course_table', {courses:courses});
+			var courseSet = courses.map(function(course){
+				return {
+					name: course.name,
+					tag: course.tag,
+					learning: course.learning,
+					time: course.time.toString().slice(0,-14),
+				};
+			});
+			res.render('admin/course_table', {courses:courseSet});
 		});
+	},
+
+	courseChart: function(req, res, next) {
+		checkAdminAccount(req, res);
+		res.render('admin/course_chart');
+	},
+
+	courseChartData: function(req, res, next) {
+		checkAdminAccount(req, res);
+		var timeSet = [
+		{"$gte":"2015-3-1 0:0:0","$lt":"2015-4-1 0:0:0"},
+		{"$gte":"2015-4-1 0:0:0","$lt":"2015-5-1 0:0:0"},
+		{"$gte":"2015-5-1 0:0:0","$lt":"2015-6-1 0:0:0"},
+		{"$gte":"2015-6-1 0:0:0","$lt":"2015-7-1 0:0:0"},
+		];
+		var dataSet = [
+				        {
+				            name:'Java',
+				            type:'bar',
+				            data:[],
+				            markPoint : {
+				                data : [
+				                    {type : 'max', name: '最大值'},
+				                    {type : 'min', name: '最小值'}
+				                ]
+				            },
+				            markLine : {
+				                data : [
+				                    {type : 'average', name: '平均值'}
+				                ]
+				            }
+				        },
+				        {
+				            name:'Android',
+				            type:'bar',
+				            data:[],
+				            markPoint : {
+				                data : [
+				                    {type : 'max', name: '最大值'},
+				                    {type : 'min', name: '最小值'}
+				                ]
+				            },
+				            markLine : {
+				                data : [
+				                    {type : 'average', name : '平均值'}
+				                ]
+				            }
+				        },{
+				            name:'IOS',
+				            type:'bar',
+				            data:[],
+				            markPoint : {
+				                data : [
+				                    {type : 'max', name: '最大值'},
+				                    {type : 'min', name: '最小值'}
+				                ]
+				            },
+				            markLine : {
+				                data : [
+				                    {type : 'average', name: '平均值'}
+				                ]
+				            }
+				        },   {
+				            name:'PHP',
+				            type:'bar',
+				            data:[],
+				            markPoint : {
+				                data : [
+				                    {type : 'max', name: '最大值'},
+				                    {type : 'min', name: '最小值'}
+				                ]
+				            },
+				            markLine : {
+				                data : [
+				                    {type : 'average', name : '平均值'}
+				                ]
+				            }
+				        },   {
+				            name:'Node.js',
+				            type:'bar',
+				            data:[],
+				            markPoint : {
+				                data : [
+				                    {type : 'max', name: '最大值'},
+				                    {type : 'min', name: '最小值'}
+				                ]
+				            },
+				            markLine : {
+				                data : [
+				                    {type : 'average', name : '平均值'}
+				                ]
+				            }
+				        },
+				    ];
+		var count=0;
+				Record.find(
+					{
+						tag:'Java',
+						'time':timeSet[0]
+					},function(err,courses){
+						count++;
+						if(err) return next(err);
+						if(courses){
+							dataSet[0].data[0]=courses.length;
+						}
+						else{
+							dataSet[0].data[0]=0;
+						}
+						Record.find(
+							{
+								tag:'Java',
+								'time':timeSet[1]
+							},function(err,courses){
+								count++;
+								if(err) return next(err);
+								if(courses){
+									dataSet[0].data[1]=courses.length;
+								}
+								else{
+									dataSet[0].data[1]=0;
+								}
+								Record.find(
+								{
+									tag:'Java',
+									'time':timeSet[2]
+								},function(err,courses){
+									count++;
+									if(err) return next(err);
+									if(courses){
+										dataSet[0].data[2]=courses.length;
+									}
+									else{
+										dataSet[0].data[2]=0;
+									}
+									Record.find(
+										{
+											tag:'Java',
+											'time':timeSet[3]
+										},function(err,courses){
+											count++;
+											if(err) return next(err);
+											if(courses){
+												dataSet[0].data[3]=courses.length;
+											}
+											else{
+												dataSet[0].data[3]=0;
+											}
+											if(count==20){
+												res.send(dataSet);
+											}
+										})
+									})
+
+							})
+					})
+
+			Record.find(
+					{
+						tag:'Android',
+						'time':timeSet[0]
+					},function(err,courses){
+						count++;
+						if(err) return next(err);
+						if(courses){
+							dataSet[1].data[0]=courses.length;
+						}
+						else{
+							dataSet[1].data[0]=0;
+						}
+						Record.find(
+							{
+								tag:'Android',
+								'time':timeSet[1]
+							},function(err,courses){
+								count++;
+								if(err) return next(err);
+								if(courses){
+									dataSet[1].data[1]=courses.length;
+								}
+								else{
+									dataSet[1].data[1]=0;
+								}
+								Record.find(
+								{
+									tag:'Android',
+									'time':timeSet[2]
+								},function(err,courses){
+									count++;
+									if(err) return next(err);
+									if(courses){
+										dataSet[1].data[2]=courses.length;
+									}
+									else{
+										dataSet[1].data[2]=0;
+									}
+									Record.find(
+										{
+											tag:'Android',
+											'time':timeSet[3]
+										},function(err,courses){
+											count++;
+											if(err) return next(err);
+											if(courses){
+												dataSet[1].data[3]=courses.length;
+											}
+											else{
+												dataSet[1].data[3]=0;
+											}
+											if(count==20){
+												res.send(dataSet);
+											}
+										})
+									})
+
+							})
+					})
+
+			Record.find(
+					{
+						tag:'IOS',
+						'time':timeSet[0]
+					},function(err,courses){
+						count++;
+						if(err) return next(err);
+						if(courses){
+							dataSet[2].data[0]=courses.length;
+						}
+						else{
+							dataSet[2].data[0]=0;
+						}
+						Record.find(
+							{
+								tag:'IOS',
+								'time':timeSet[1]
+							},function(err,courses){
+								count++;
+								if(err) return next(err);
+								if(courses){
+									dataSet[2].data[1]=courses.length;
+								}
+								else{
+									dataSet[2].data[1]=0;
+								}
+								Record.find(
+								{
+									tag:'IOS',
+									'time':timeSet[2]
+								},function(err,courses){
+									count++;
+									if(err) return next(err);
+									if(courses){
+										dataSet[2].data[2]=courses.length;
+									}
+									else{
+										dataSet[2].data[2]=0;
+									}
+									Record.find(
+										{
+											tag:'IOS',
+											'time':timeSet[3]
+										},function(err,courses){
+											count++;
+											if(err) return next(err);
+											if(courses){
+												dataSet[2].data[3]=courses.length;
+											}
+											else{
+												dataSet[2].data[3]=0;
+											}
+											if(count==20){
+												res.send(dataSet);
+											}
+										})
+									})
+
+							})
+					})
+			
+			Record.find(
+					{
+						tag:'PHP',
+						'time':timeSet[0]
+					},function(err,courses){
+						count++;
+						if(err) return next(err);
+						if(courses){
+							dataSet[3].data[0]=courses.length;
+						}
+						else{
+							dataSet[3].data[0]=0;
+						}
+						Record.find(
+							{
+								tag:'PHP',
+								'time':timeSet[1]
+							},function(err,courses){
+								count++;
+								if(err) return next(err);
+								if(courses){
+									dataSet[3].data[1]=courses.length;
+								}
+								else{
+									dataSet[3].data[1]=0;
+								}
+								Record.find(
+								{
+									tag:'PHP',
+									'time':timeSet[2]
+								},function(err,courses){
+									count++;
+									if(err) return next(err);
+									if(courses){
+										dataSet[3].data[2]=courses.length;
+									}
+									else{
+										dataSet[3].data[2]=0;
+									}
+									Record.find(
+										{
+											tag:'PHP',
+											'time':timeSet[3]
+										},function(err,courses){
+											count++;
+											if(err) return next(err);
+											if(courses){
+												dataSet[3].data[3]=courses.length;
+											}
+											else{
+												dataSet[3].data[3]=0;
+											}
+											if(count==20){
+												res.send(dataSet);
+											}
+										})
+									})
+
+							})
+					})
+			Record.find(
+					{
+						tag:'Node',
+						'time':timeSet[0]
+					},function(err,courses){
+						count++;
+						if(err) return next(err);
+						if(courses){
+							dataSet[4].data[0]=courses.length;
+						}
+						else{
+							dataSet[4].data[0]=0;
+						}
+						Record.find(
+							{
+								tag:'Node',
+								'time':timeSet[1]
+							},function(err,courses){
+								count++;
+								if(err) return next(err);
+								if(courses){
+									dataSet[4].data[1]=courses.length;
+								}
+								else{
+									dataSet[4].data[1]=0;
+								}
+								Record.find(
+								{
+									tag:'Node',
+									'time':timeSet[2]
+								},function(err,courses){
+									count++;
+									if(err) return next(err);
+									if(courses){
+										dataSet[4].data[2]=courses.length;
+									}
+									else{
+										dataSet[4].data[2]=0;
+									}
+									Record.find(
+										{
+											tag:'Node',
+											'time':timeSet[3]
+										},function(err,courses){
+											count++;
+											if(err) return next(err);
+											if(courses){
+												dataSet[4].data[3]=courses.length;
+											}
+											else{
+												dataSet[4].data[3]=0;
+											}
+											if(count==20){
+												res.send(dataSet);
+											}
+										})
+									})
+
+							})
+					})
+		
 	},
 
 	courseUpload: function(req, res, next){
@@ -163,6 +578,9 @@ module.exports = {
 					tag: fields.tag,
 					grade:fields.grade,
 					info:fields.info,
+					book:fields.book,
+					code:fields.code,
+					practice: fields.practice,
 					img:pathsave,
 				});
 				c.save(function(err) {
@@ -223,10 +641,10 @@ module.exports = {
 				 readStream.on('end',function(){
 				     	 fs.unlinkSync(photo.path);
 				 });
-				 var update = {$set : { info : fields.info, tag : fields.tag, img:pathsave, grade:fields.grade}};
+				 var update = {$set : { info : fields.info, tag : fields.tag, img:pathsave, grade:fields.grade, book:fields.book, code:fields.code, practice:fields.practice}};
 			 }
 			else{
-				 var update     = {$set : { info : fields.info, tag : fields.tag ,grade:fields.grade}};
+				 var update     = {$set : { info : fields.info, tag : fields.tag ,grade:fields.grade, book:fields.book, code:fields.code, practice:fields.practice}};
 			}
 		        var conditions = {name: req.params.name};
 		        var options    = {upsert : true};
@@ -270,7 +688,9 @@ module.exports = {
 						type:'success', intro:'',
 						message:'删除 '+req.params.name +' 成功！',
 					}
+					if(req.params.link == 'list')
 					res.redirect(303, '/admin/' + req.session.account.id +'/course_list');
+				else res.redirect(303, '/admin/' + req.session.account.id +'/course_table');
 		 		   }
 			});
 		    }
@@ -446,6 +866,53 @@ module.exports = {
 			}
 			res.redirect(303, '/admin/' + req.session.account.id +'/note_list');
 		    }
+		});
+	},
+
+	suggestionList: function(req, res, next) {
+		checkAdminAccount(req, res);
+		Suggestion.find(function(err, suggestions) {
+			if(err) return next(err);
+			var suggestionSet = suggestions.map(function(suggestion){
+				var flag = true;
+				if(suggestion.reply!='暂无回复')flag=false;
+				return {
+					title: suggestion.title,
+					content: suggestion.content,
+					stu_account: suggestion.stu_account,
+					time: suggestion.time.toString().slice(0,-14),
+					reply: suggestion.reply,
+					replyed: flag,
+				};
+			});
+			res.render('admin/suggestion_list', {suggestions: suggestionSet});
+		});
+	},
+
+	suggestionUpdate: function(req, res, next) {
+		checkAdminAccount(req, res);
+		Suggestion.findOne({stu_account: req.params.student, title: req.params.title},function(err, suggestion) {
+			if(err) return next(err);
+			res.render('admin/suggestion_update', suggestion);
+		});
+	},
+
+	processSuggestionUpdate: function(req, res, next) {
+		checkAdminAccount(req, res);
+		Suggestion.findOne({stu_account: req.params.student, title: req.params.title},function(err, suggestion) {
+			if(err) return next(err);
+			if(!suggestion) return next();
+			suggestion.reply = req.body.reply;
+			suggestion.save();
+			req.session.flash = {
+				type:'success', intro:'',
+				message:'回复成功!',
+			}
+			Student.findOne({account: req.params.student},function(err, student){
+				student.exp += parseInt(req.body.exp);
+				student.save();
+			})
+			res.redirect(303, '/admin/'+req.session.account.id+'/suggestion_list');
 		});
 	},
 

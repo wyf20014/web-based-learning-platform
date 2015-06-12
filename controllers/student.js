@@ -2,6 +2,7 @@ var Student = require('../models/student.js');
 var Note = require('../models/note.js');
 var Question = require('../models/question.js');
 var Answer = require('../models/answer.js');
+var Suggestion = require('../models/suggestion.js');
 var studentViewModel = require('../viewModels/student.js');
 var _ = require('underscore');
 
@@ -27,23 +28,32 @@ module.exports = {
 		
 		//问答相关
 		app.get('/student/:id/my_question', this.myQuestion);
+		app.get('/student/:id/my_answer', this.myAnswer);
 		app.get('/student/:id/write_question', this.writeQuestion);
 		app.post('/student/:id/write_question', this.processWriteQuestion);
 		app.post('/student/:id/write_answer', this.processWriteAnswer);
 
 		//日记相关
 		app.get('/student/:id/my_note', this.myNote);
+		app.get('/student/:id/note_collect', this.myNoteCollection);
 		app.get('/student/:id/write_note', this.writeNote);
 		app.post('/student/:id/write_note', this.processWriteNote);
 		app.get('/student/:id/update_note/:title', this.updateNote);
 		app.post('/student/:id/update_note/:title', this.processUpdateNote);
 		app.get('/student/:id/del_note/:title', this.delNote);
+		app.get('/student/:id/note_collect/:note', this.collectNote);
+		app.get('/student/:id/note_cancel_collect/:note', this.cancelCollectNote);
+
 
 		//账户相关
 		app.get('/student/:id/my_account', this.myAccount);
 		app.get('/student/:id/update_password', this.updatePassword);
 		app.post('/student/:id/update_password', this.processUpdatePassword);
 
+		//建议相关
+		app.get('/student/:id/my_suggestion', this.mySuggestion);
+		app.get('/student/:id/write_suggestion', this.writeSuggestion);
+		app.post('/student/:id/write_suggestion', this.processWriteSuggestion);
 		
 	},
 
@@ -161,6 +171,7 @@ module.exports = {
 				question_number : student.question_number,
 				course_number : stu_courses_length,
 				note_number : student.note_number,
+				exp : student.exp,
 			};
 			var vm = _.extend(studentinfo,studentViewModel.getRecommendCourses(student))
 			res.render('student/my_home',vm);
@@ -178,6 +189,7 @@ module.exports = {
 			res.render('student/my_course', vm);
 		});
 	},
+
 	stuCourseDel:function(req, res, next){
 		checkStudentAccount(req, res);
 		Student.findById(req.params.id, function(err, student) {
@@ -194,9 +206,10 @@ module.exports = {
 				type:'success', intro:'',
 				message:'退选 '+req.params.course+' 成功！',
 			}
-			res.render('student/my_course', studentViewModel.getMyCourses(student));
+			res.redirect(303, '/student/'+req.session.account.id+'/my_course');
 		});
 	},
+
 	myNote: function(req, res, next) {
 		checkStudentAccount(req, res);
 		Student.findById(req.params.id, function(err, student) {
@@ -222,6 +235,7 @@ module.exports = {
 			'tag':req.body.tag,
 			'content':req.body.content,
 			'stu_account':req.session.account.name,
+			'read_right': req.body.read_right,
 		};
 		Note.findOne({stu_account: req.session.account.name, title:req.body.title},function(err, note){
 			if(err) return next(err);
@@ -272,7 +286,7 @@ module.exports = {
 
 	processUpdateNote: function(req, res, next) {
 		var conditions = {stu_account: req.session.account.name, title:req.params.title};
-		var update     = {$set : {tag : req.body.tag, content : req.body.content}};
+		var update     = {$set : {tag : req.body.tag, content : req.body.content, read_right:req.body.read_right}};
 		var options    = {upsert : true};
 		Note.update(conditions, update, options, function(error){
     			if(error) {
@@ -316,18 +330,96 @@ module.exports = {
 		});
 	},
 
+	myNoteCollection:function(req, res, next){
+		checkStudentAccount(req, res);
+		Student.findById(req.params.id,function(err, student){
+			if(err) return next(err);
+			if(!student) return next(); 
+			var collections = student.note_collect;
+			var length = collections.length;
+			var noteSet = [];
+			var n=0;
+			if(length!=0){
+				for(var i=0; i<length; i++){
+					Note.findById(collections[i].note_id,function(err,note){
+						if(note){
+							noteSet.push({
+								title: note.title,
+								id: note._id,
+								time: note.time.toString().slice(0,-14),
+								stu: note.stu_account,
+							})
+						}
+						n++;
+						if(n==length){
+							res.render('student/note_collect',{notes : noteSet, noteLength:length});
+						}
+					});
+				}
+			}
+			else res.render('student/note_collect',{notes : noteSet, noteLength:length});		
+		})
+	},
+
+	collectNote: function(req, res, next){
+		checkStudentAccount(req, res);
+		Student.findById(req.params.id,function(err, student){
+			if(err) return res.send(false);
+			if(!student) return res.send(false); 
+			student.note_collect.push({"note_id":req.params.note});
+			student.save();
+			Note.findById(req.params.note,function(err, note){
+				if(note){
+					note.collect_number +=1;
+					note.save();
+				}
+			})
+			res.send(true);
+		})
+	},
+
+	cancelCollectNote: function(req, res, next){
+		checkStudentAccount(req, res);
+		Student.findById(req.params.id,function(err, student){
+			if(err) return res.send(false);
+			if(!student) return res.send(false); 
+			var notes = student.note_collect;
+			for(var i=0,length=notes.length;i<length;i++){
+				if(notes[i].note_id==req.params.note){
+					notes.splice(i,1);
+				}
+			}
+			student.save();
+			Note.findById(req.params.note,function(err, note){
+				if(note){
+					note.collect_number -= 1;
+					note.save();
+				}
+			});
+			res.send(true);
+		})
+	},
+
 	myQuestion: function(req, res, next) {
 		checkStudentAccount(req, res);
 		Student.findById(req.params.id, function(err, student) {
 			if(err) return next(err);
 			if(!student) return next(); 	// pass this on to 404 handler
-			student.getAnswers(function(err, answers) {
+			student.getQuestions(function(err, questions) {
 				if(err) return next(err);
-				student.getQuestions(function(err, questions){
-					if(err) return next(err);
-					res.render('student/my_question', studentViewModel.getMyQuestions(answers, questions));
-				})
+				res.render('student/my_question', studentViewModel.getMyQuestions(questions));
 			});
+		});
+	},
+	myAnswer: function(req, res, next) {
+		checkStudentAccount(req, res);
+		Student.findById(req.params.id, function(err, student) {
+			if(err) return next(err);
+			if(!student) return next(); 	// pass this on to 404 handler
+			student.getAnswers(function(err, answers){
+				if(err) return next(err);
+				res.render('student/my_answer', studentViewModel.getMyAnswers(answers));
+			})
 		});
 	},
 
@@ -389,6 +481,7 @@ module.exports = {
 			'content':req.body.content,
 			'stu_account':req.session.account.name,
 			'question_name':req.session.question.name,
+			'question_id':req.session.question.id,
 		};
 		var c = new Answer(req.session.answerform);
 		c.save(function(err) {
@@ -406,7 +499,7 @@ module.exports = {
 				message:'回答提交成功！',
 			}
 			Student.findById(req.session.account.id,function(err,student){
-				student.question_number+=1;
+				student.answer_number+=1;
 				student.save();
 			});
 			delete req.session.answerform;
@@ -420,7 +513,7 @@ module.exports = {
 		Student.findOne({account:req.session.account.name},function(err, student){
 			if(err) return next(err);
 			if(!student) return next(); 
-			res.render('student/my_account',studentViewModel.getStudentAccount(student));
+			res.render('student/my_account',studentViewModel.getMyAccount(student));
 		})
 	},
 
@@ -470,5 +563,64 @@ module.exports = {
 				}
 			});
 		}
+	},
+
+	mySuggestion: function(req, res, next) {
+		checkStudentAccount(req, res);
+		Student.findById(req.params.id, function(err, student) {
+			if(err) return next(err);
+			if(!student) return next(); 	// pass this on to 404 handler
+			student.getSuggestions(function(err, suggestions) {
+				if(err) return next(err);
+				res.render('student/my_suggestion', studentViewModel.getMySuggestions(suggestions));
+			});
+		});
+	},
+
+	writeSuggestion: function(req, res, next) {
+		checkStudentAccount(req, res);
+		if(!req.session.suggestionform) req.session.suggestionform = {'title':'','content':''};
+		res.locals.suggestionform = req.session.suggestionform;
+		res.render('student/write_suggestion');
+	},
+
+	processWriteSuggestion: function(req, res, next) {
+		req.session.suggestionform = { 
+			'title':req.body.title, 
+			'content':req.body.content,
+			'stu_account':req.session.account.name,
+		};
+		Suggestion.findOne({stu_account: req.session.account.name, title:req.body.title},function(err, suggestion){
+			if(err) return next(err);
+			if(suggestion) {
+				req.session.flash = {
+					type:'danger', intro:'',
+					message:'你已经提过相同标题的建议了!',
+				}
+				return res.redirect(303, '/student/'+req.session.account.id+'/write_suggestion');
+			}
+			else{
+				var c = new Suggestion(req.session.suggestionform);
+				c.save(function(err) {
+					if(err) {
+						if(req.xhr) return res.json({ error: '添加失败.' });
+						req.session.flash = {
+							type: 'danger',intro: '',
+							message: '数据库发生了问题，请重试一次',
+						};
+						return res.redirect(303, '/student/'+req.session.account.id+'/write_suggestion');
+					}
+					if(req.xhr) return res.json({ success: true });
+					req.session.flash = {
+						type:'success', intro:'',
+						message:'建议提交成功！',
+					}
+					delete req.session.suggestionform;
+
+					res.redirect(303, '/student/' + req.session.account.id +'/my_suggestion');
+				});
+				
+			}
+		});
 	},
 };

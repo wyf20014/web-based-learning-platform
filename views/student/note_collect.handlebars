@@ -1,0 +1,44 @@
+{{>student_nav}}
+
+<div class="col-sm-9">
+{{#if notes}}
+	<div class="row">
+		<div class="col-sm-12 text-center">
+	                <h3>日记收藏<span id='note_length'>({{noteLength}})</span></h3>
+	            </div>
+	</div>
+	
+	{{#each notes}}
+		  <div class="col-sm-12" id="{{id}}">
+		    <div class="thumbnail">
+		      <div class="caption text-center">
+		        <h3 style="color:blue">{{title}}<span style="color:black;font-size:14px">&nbsp;&nbsp;作者:{{stu}}&nbsp;&nbsp;编写时间:{{time}}</span></h3>
+		        <p>
+		        <a href="/note/{{id}}/preferences" class="btn btn-primary" role="button">查看</a>
+		         <a  class="btn btn-danger" role="button" onclick="cancelMyCollectNote('{{../account.id}}','{{title}}','{{id}}')">取消收藏</a></p>
+		      </div>
+		    </div>
+		  </div>
+		
+	{{/each}}
+	
+{{else}}
+<div class='row'>
+	<div class="col-sm-5">
+		<h4>你还没收藏日记，快去试试吧！</h4>
+	</div>
+	<div class="col-sm-1">
+                <button class="btn btn-info" onclick="window.location='/note/list'">日记社区</button>
+            </div>
+</div>
+{{/if}}
+</div>
+
+{{#section 'jquery'}}
+	<script>
+		$('document').ready(function(){
+			$('#header_nav li').eq(4).addClass('active');
+			$('#student_nav li').eq(6).addClass('active');
+		});
+	</script>
+{{/section}}

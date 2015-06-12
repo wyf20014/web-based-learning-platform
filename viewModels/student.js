@@ -72,32 +72,25 @@ module.exports = {
 					date: note.date,
 					content: note.content,
 					id: note._id,
-					tag:note.tag,
-				};
+					tag : note.tag,
+					time :note.time.toString().slice(0,-14)
+				}
 			})
 		},{"noteLength":length});
 	},
 
-	getStudentAccount : function (student){
+	getMyAccount : function (student){
 		var course_number = student.courses.length;
 		var vm = _.omit(student,'_id',"account");
 		return _.extend(vm,{course_number:course_number});
 	},
 
-	getMyQuestions : function (answers, questions){
-		var answersLength = answers.length;
+	getMyQuestions : function (questions){
 		var questionsLength = questions.length;
 		var length = {
-			answerLength:answersLength,
 			questionLength:questionsLength,
 		}
 		return _.extend(length,{
-				answers: answers.map(function(answer){
-					return{
-						question_name: answer.question_name,
-						content: answer.content,
-					};
-				}),
 				questions: questions.map(function(question){
 					return{
 						name: question.name,
@@ -107,7 +100,41 @@ module.exports = {
 					};
 				}),
 		});
-		
+	},
+
+	getMyAnswers : function (answers){
+		var answersLength = answers.length;
+		var length = {
+			answerLength:answersLength,
+		}
+		return _.extend(length,{
+				answers: answers.map(function(answer){
+					return{
+						question_name: answer.question_name,
+						question_id: answer.question_id,
+						content: answer.content,
+						time: answer.time,
+					};
+				}),
+		});
+	},
+
+
+	getMySuggestions : function (suggestions){
+		var suggestionsLength = suggestions.length;
+		var length = {
+			suggestionLength:suggestionsLength,
+		}
+		return _.extend(length,{
+				suggestions: suggestions.map(function(suggestion){
+					return{
+						title: suggestion.title,
+						content: suggestion.content,
+						time: suggestion.time.toString().slice(0,-14),
+						reply: suggestion.reply,
+					};
+				}),
+		});
 	},
 
 	getStudentList : function(students){
@@ -116,6 +143,12 @@ module.exports = {
 		});
 		var length = students.length;
 		return {students:vm, studentLength:length};
+	},
+
+	getStudentAccount : function (student){
+		var course_number = student.courses.length;
+		var vm = _.omit(student,'_id',"account");
+		return _.extend(vm,{course_number:course_number, user_account:student.account});
 	},
 };
 

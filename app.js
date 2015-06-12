@@ -1,8 +1,8 @@
 var http = require('http'),
     express = require('express'),
     Admin = require('./models/admin.js'),
-    formidable = require('formidable');
-
+    formidable = require('formidable'),
+    Record = require('./models/record.js');
 var app = express();
 
 // set up handlebars view engine
@@ -47,6 +47,7 @@ Admin.find(function(err, admins){
     }).save();
 
 });
+
 //根据用户session中role的值决定header显示的内容
 app.use(function(req, res, next){
     switch(req.session.role){
@@ -120,3 +121,5 @@ if(require.main === module){
     // application imported as a module via "require": export function to create server
     module.exports = startServer;
 }
+//1．    管理员统计功能完善，实现按月对比柱状图、增加帮助网站发展决策的统计
+//2．  课程学习方式多样化，例如：增添教材连接、课后练习题、论坛讨论，增加分享渠道、分享成功项目代码

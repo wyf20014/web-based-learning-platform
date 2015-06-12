@@ -18,7 +18,7 @@
 			  <option value="Android">Android</option>
 			  <option value="IOS">IOS</option>
 			  <option value="PHP">PHP</option>
-			  <option value="Node.js">Node.js</option>
+			  <option value="Node">Node.js</option>
 			</select>
 			<input id="tag" type="hidden"  value='{{tag}}'>
 		</div>
@@ -33,6 +33,18 @@
 			  <option value="大学四年级">大学四年级</option>
 			</select>
 			<input id="grade" type="hidden"  value='{{grade}}'>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="fieldBook" class="col-sm-2 control-label">课程教材(可不填))</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" name='book' value='{{book}}' >
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="fieldCode" class="col-sm-2 control-label">源码地址(可不填)</label>
+		<div class="col-sm-6">
+			<input type="text" class="form-control" name='code' value='{{code}}'>
 		</div>
 	</div>
 	<div class="form-group">
@@ -51,7 +63,13 @@
 	<div class="form-group">
 		<label for="fieldInfo" class="col-sm-2 control-label">课程简介</label>
 		<div class="col-sm-8">
-			<textarea name="info" rows='10' class="form-control" required>{{info}}</textarea>
+			<textarea name="info" rows='6' class="form-control" required>{{info}}</textarea>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="fieldPractice" class="col-sm-2 control-label">课后练习</label>
+		<div class="col-sm-8">
+			<textarea name="practice" rows='6' class="form-control" required>{{practice}}</textarea>
 		</div>
 	</div>
 	<div class="form-group">
